@@ -27,12 +27,11 @@ import {
 import { exportToPdf, printElement } from '../utils/exportPdf';
 import { AnimatePresence, motion } from 'motion/react';
 import {
-  PREVIEW_STORAGE_KEY,
   PREVIEW_CHANNEL_NAME,
-  readPreviewSnapshot,
+  getPreviewStorageKey,
+  readPreviewSnapshotForProject,
   validateSnapshot,
-  hasPreviewSnapshotKey,
-  readRawSnapshot,
+  hasPreviewSnapshotKeyForProject,
   ReadmePreviewSnapshot,
   savePreviewSnapshot
 } from '../utils/previewBridge';
@@ -44,16 +43,38 @@ interface PreviewPageProps {
 
 export const PreviewPage: React.FC<PreviewPageProps> = ({ showBadges }) => {
   const { t, i18n } = useTranslation();
+  const previewProjectId = new URLSearchParams(window.location.search).get('projectId');
   
   type PreviewLoadState = 'loading' | 'ready' | 'empty' | 'error';
 
+  const isSnapshotForThisPreview = (candidate: ReadmePreviewSnapshot): boolean => {
+    return !previewProjectId || candidate.projectId === previewProjectId;
+  };
+
+  const readSnapshotForThisPreview = (): ReadmePreviewSnapshot | null => {
+    const loaded = readPreviewSnapshotForProject(previewProjectId);
+    return loaded && isSnapshotForThisPreview(loaded) ? loaded : null;
+  };
+
+  const hasSnapshotKeyForThisPreview = (): boolean => {
+    return hasPreviewSnapshotKeyForProject(previewProjectId);
+  };
+
+  const saveSnapshotForThisPreview = (candidate: ReadmePreviewSnapshot): boolean => {
+    if (!isSnapshotForThisPreview(candidate)) {
+      return false;
+    }
+
+    return savePreviewSnapshot(candidate);
+  };
+
   // 1. Load state and validation state
   const [snapshot, setSnapshot] = useState<ReadmePreviewSnapshot | null>(() => {
-    return readPreviewSnapshot();
+    return readSnapshotForThisPreview();
   });
 
   const [loadState, setLoadState] = useState<PreviewLoadState>(() => {
-    const loaded = readPreviewSnapshot();
+    const loaded = readSnapshotForThisPreview();
     if (loaded && loaded.project) {
       return 'ready';
     }
@@ -61,8 +82,8 @@ export const PreviewPage: React.FC<PreviewPageProps> = ({ showBadges }) => {
   });
 
   const [isSnapshotCorrupted, setIsSnapshotCorrupted] = useState<boolean>(() => {
-    if (hasPreviewSnapshotKey()) {
-      return readPreviewSnapshot() === null;
+    if (hasSnapshotKeyForThisPreview()) {
+      return readSnapshotForThisPreview() === null;
     }
     return false;
   });
@@ -127,13 +148,13 @@ export const PreviewPage: React.FC<PreviewPageProps> = ({ showBadges }) => {
 
   // Load and validate from localStorage
   const loadSnapshot = () => {
-    const loaded = readPreviewSnapshot();
+    const loaded = readSnapshotForThisPreview();
     if (loaded) {
       setSnapshot(loaded);
       setIsSnapshotCorrupted(false);
       setLoadState('ready');
       return loaded;
-    } else if (hasPreviewSnapshotKey()) {
+    } else if (hasSnapshotKeyForThisPreview()) {
       setIsSnapshotCorrupted(true);
       setLoadState('error');
     }
@@ -142,13 +163,16 @@ export const PreviewPage: React.FC<PreviewPageProps> = ({ showBadges }) => {
 
   // Handshake with window.opener and setup 3s loading timeout
   useEffect(() => {
-    const initialSnapshot = readPreviewSnapshot();
+    const initialSnapshot = readSnapshotForThisPreview();
     if (initialSnapshot) {
       setLoadState('ready');
       // Send one PREVIEW_READY ready signal to editor in case they want to handshake
       if (window.opener) {
         try {
-          window.opener.postMessage({ type: 'PREVIEW_READY' }, window.location.origin);
+          window.opener.postMessage(
+            { type: 'PREVIEW_READY', projectId: previewProjectId },
+            window.location.origin
+          );
         } catch (e) {
           // ignore opener access issues
         }
@@ -172,6 +196,7 @@ export const PreviewPage: React.FC<PreviewPageProps> = ({ showBadges }) => {
           window.opener.postMessage(
             {
               type: 'PREVIEW_READY',
+              projectId: previewProjectId,
             },
             window.location.origin
           );
@@ -218,9 +243,14 @@ export const PreviewPage: React.FC<PreviewPageProps> = ({ showBadges }) => {
 
       // Handle the snapshot
       if (event.data?.type === 'PREVIEW_SNAPSHOT') {
+        const messageProjectId = typeof event.data.projectId === 'string' ? event.data.projectId : null;
+        if (previewProjectId && messageProjectId !== previewProjectId) {
+          return;
+        }
+
         const payload = event.data.payload;
 
-        if (validateSnapshot(payload)) {
+        if (validateSnapshot(payload) && isSnapshotForThisPreview(payload)) {
           // Clear retries immediately since we successfully received the snapshot!
           if (retryIntervalRef.current !== null) {
             clearInterval(retryIntervalRef.current);
@@ -236,7 +266,7 @@ export const PreviewPage: React.FC<PreviewPageProps> = ({ showBadges }) => {
           setLoadState('ready');
 
           // Save snapshot locally in this tab's partition!
-          savePreviewSnapshot(payload);
+          saveSnapshotForThisPreview(payload);
         } else {
           console.warn('[README Preview] Invalid snapshot received via postMessage.');
           setLoadState('error');
@@ -256,12 +286,17 @@ export const PreviewPage: React.FC<PreviewPageProps> = ({ showBadges }) => {
     const channel = new BroadcastChannel(PREVIEW_CHANNEL_NAME);
     const handleMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === 'PREVIEW_SNAPSHOT') {
+        const messageProjectId = typeof event.data.projectId === 'string' ? event.data.projectId : null;
+        if (previewProjectId && messageProjectId !== previewProjectId) {
+          return;
+        }
+
         const payload = event.data.payload;
-        if (validateSnapshot(payload)) {
+        if (validateSnapshot(payload) && isSnapshotForThisPreview(payload)) {
           setSnapshot(payload);
           setIsSnapshotCorrupted(false);
           setLoadState('ready');
-          savePreviewSnapshot(payload);
+          saveSnapshotForThisPreview(payload);
         } else {
           setIsSnapshotCorrupted(true);
           setLoadState('error');
@@ -272,7 +307,7 @@ export const PreviewPage: React.FC<PreviewPageProps> = ({ showBadges }) => {
 
     // Send fallback PREVIEW_READY signal
     try {
-      channel.postMessage({ type: 'PREVIEW_READY' });
+      channel.postMessage({ type: 'PREVIEW_READY', projectId: previewProjectId });
     } catch (e) {
       // Ignore broadcast errors in partitioned iframe environment
     }
@@ -286,14 +321,14 @@ export const PreviewPage: React.FC<PreviewPageProps> = ({ showBadges }) => {
   // Sync fallback using standard 'storage' event listener
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === PREVIEW_STORAGE_KEY && e.newValue) {
+      if (e.key === getPreviewStorageKey(previewProjectId) && e.newValue) {
         try {
           const parsed = JSON.parse(e.newValue);
-          if (validateSnapshot(parsed)) {
+          if (validateSnapshot(parsed) && isSnapshotForThisPreview(parsed)) {
             setSnapshot(parsed);
             setIsSnapshotCorrupted(false);
             setLoadState('ready');
-            savePreviewSnapshot(parsed);
+            saveSnapshotForThisPreview(parsed);
           } else {
             setIsSnapshotCorrupted(true);
             setLoadState('error');
@@ -327,7 +362,7 @@ export const PreviewPage: React.FC<PreviewPageProps> = ({ showBadges }) => {
     if (loaded) {
       showToast(t('preview.toast_preview_updated', 'Preview atualizado.'), 'success');
     } else {
-      if (hasPreviewSnapshotKey()) {
+      if (hasSnapshotKeyForThisPreview()) {
         setIsSnapshotCorrupted(true);
         showToast('Os dados do preview foram encontrados, mas não puderam ser lidos.', 'error');
       } else {

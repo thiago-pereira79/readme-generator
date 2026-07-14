@@ -32,11 +32,39 @@ const defaultPreferences: AppSettings = {
   autoSaveDrafts: true,
 };
 
+function createProjectId(): string {
+  return typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : Math.random().toString(36).substring(2, 9);
+}
+
+function cloneReadmeData<T>(value: T): T {
+  if (typeof structuredClone === 'function') {
+    return structuredClone(value);
+  }
+
+  return JSON.parse(JSON.stringify(value)) as T;
+}
+
+function createDefaultOptionalSections(): ReadmeProject['optionalSections'] {
+  return {
+    prerequisites: false,
+    scripts: false,
+    folderStructure: false,
+    roadmap: false,
+    contributing: false,
+    authors: false,
+    acknowledgements: false,
+    contact: false,
+    tests: false
+  };
+}
+
 function createEmptyReadmeProject(defaultLicense = ''): ReadmeProject {
   const now = new Date().toISOString();
 
   return {
-    id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9),
+    id: createProjectId(),
     name: '',
     description: '',
     technologies: [],
@@ -53,17 +81,7 @@ function createEmptyReadmeProject(defaultLicense = ''): ReadmeProject {
     authorUrl: '',
     linkedinUrl: '',
     screenshots: [],
-    optionalSections: {
-      prerequisites: false,
-      scripts: false,
-      folderStructure: false,
-      roadmap: false,
-      contributing: false,
-      authors: false,
-      acknowledgements: false,
-      contact: false,
-      tests: false
-    },
+    optionalSections: createDefaultOptionalSections(),
     prerequisitesContent: '',
     scriptsContent: '',
     folderStructureContent: '',
@@ -73,6 +91,47 @@ function createEmptyReadmeProject(defaultLicense = ''): ReadmeProject {
     acknowledgementsContent: '',
     contactContent: '',
     testsContent: '',
+    createdAt: now,
+    updatedAt: now,
+  };
+}
+
+export function createProjectFromTemplate(templateProject: Partial<ReadmeProject>): ReadmeProject {
+  const source = cloneReadmeData(templateProject);
+  const templateRecord = source as Partial<ReadmeProject> & { author?: unknown };
+  const now = new Date().toISOString();
+
+  return {
+    id: createProjectId(),
+    name: source.name || 'Projeto sem Nome',
+    description: source.description || '',
+    technologies: source.technologies ? [...source.technologies] : [],
+    features: source.features ? [...source.features] : [],
+    installation: source.installation || '',
+    usage: source.usage || '',
+    license: source.license || 'MIT',
+    repositoryUrl: source.repositoryUrl || '',
+    deployUrl: source.deployUrl || '',
+    customLicense: source.customLicense || '',
+    websiteUrl: source.websiteUrl || '',
+    authorName: source.authorName || (typeof templateRecord.author === 'string' ? templateRecord.author : ''),
+    authorEmail: source.authorEmail || '',
+    authorUrl: source.authorUrl || '',
+    linkedinUrl: source.linkedinUrl || '',
+    screenshots: source.screenshots ? cloneReadmeData(source.screenshots) : [],
+    optionalSections: {
+      ...createDefaultOptionalSections(),
+      ...(source.optionalSections || {}),
+    },
+    prerequisitesContent: source.prerequisitesContent || '',
+    scriptsContent: source.scriptsContent || '',
+    folderStructureContent: source.folderStructureContent || '',
+    roadmapContent: source.roadmapContent || '',
+    contributingContent: source.contributingContent || '',
+    authorsContent: source.authorsContent || '',
+    acknowledgementsContent: source.acknowledgementsContent || '',
+    contactContent: source.contactContent || '',
+    testsContent: source.testsContent || '',
     createdAt: now,
     updatedAt: now,
   };
@@ -523,48 +582,7 @@ export function useReadmeState() {
 
   // Load a template (prefills active project with template data, but keeps its own unique ID)
   const loadTemplate = useCallback((templateProject: Partial<ReadmeProject>, templateName: string) => {
-    const templateRecord = templateProject as Partial<ReadmeProject> & { author?: unknown };
-    const merged: ReadmeProject = {
-      id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9),
-      name: templateProject.name || 'Projeto sem Nome',
-      description: templateProject.description || '',
-      technologies: templateProject.technologies || [],
-      features: templateProject.features || [],
-      installation: templateProject.installation || '',
-      usage: templateProject.usage || '',
-      license: templateProject.license || 'MIT',
-      repositoryUrl: templateProject.repositoryUrl || '',
-      deployUrl: templateProject.deployUrl || '',
-      customLicense: templateProject.customLicense || '',
-      websiteUrl: templateProject.websiteUrl || '',
-      authorName: templateProject.authorName || (typeof templateRecord.author === 'string' ? templateRecord.author : ''),
-      authorEmail: templateProject.authorEmail || '',
-      authorUrl: templateProject.authorUrl || '',
-      linkedinUrl: templateProject.linkedinUrl || '',
-      screenshots: templateProject.screenshots || [],
-      optionalSections: templateProject.optionalSections || {
-        prerequisites: false,
-        scripts: false,
-        folderStructure: false,
-        roadmap: false,
-        contributing: false,
-        authors: false,
-        acknowledgements: false,
-        contact: false,
-        tests: false
-      },
-      prerequisitesContent: templateProject.prerequisitesContent || '',
-      scriptsContent: templateProject.scriptsContent || '',
-      folderStructureContent: templateProject.folderStructureContent || '',
-      roadmapContent: templateProject.roadmapContent || '',
-      contributingContent: templateProject.contributingContent || '',
-      authorsContent: templateProject.authorsContent || '',
-      acknowledgementsContent: templateProject.acknowledgementsContent || '',
-      contactContent: templateProject.contactContent || '',
-      testsContent: templateProject.testsContent || '',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    const merged = createProjectFromTemplate(templateProject);
 
     setActiveProject(merged);
     addHistoryLog('created', `${merged.name} (via Template: ${templateName})`);

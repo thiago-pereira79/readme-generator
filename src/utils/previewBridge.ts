@@ -1,6 +1,7 @@
 import { ReadmeProject, AppLocale } from '../types';
 
 export const PREVIEW_STORAGE_KEY = 'readme:preview:v1';
+export const PREVIEW_STORAGE_KEY_PREFIX = 'readme-preview-snapshot:';
 export const PREVIEW_CHANNEL_NAME = 'readme-preview-sync';
 
 export interface ReadmePreviewSnapshot {
@@ -53,6 +54,11 @@ export function validateSnapshot(snapshot: unknown): snapshot is ReadmePreviewSn
   return true;
 }
 
+export function getPreviewStorageKey(projectId?: string | null): string {
+  const normalizedProjectId = projectId?.trim();
+  return normalizedProjectId ? `${PREVIEW_STORAGE_KEY_PREFIX}${normalizedProjectId}` : PREVIEW_STORAGE_KEY;
+}
+
 /**
  * Validate active project before generation
  */
@@ -77,10 +83,11 @@ export function validateProject(project: ReadmeProject): { valid: boolean; error
 export function savePreviewSnapshot(snapshot: ReadmePreviewSnapshot): boolean {
   try {
     const serialized = JSON.stringify(snapshot);
-    localStorage.setItem(PREVIEW_STORAGE_KEY, serialized);
+    const storageKey = getPreviewStorageKey(snapshot.projectId);
+    localStorage.setItem(storageKey, serialized);
     
     // Confirm write synchronously
-    const saved = localStorage.getItem(PREVIEW_STORAGE_KEY);
+    const saved = localStorage.getItem(storageKey);
     if (saved === serialized) {
       return true;
     } else {
@@ -97,8 +104,12 @@ export function savePreviewSnapshot(snapshot: ReadmePreviewSnapshot): boolean {
  * Read preview snapshot from localStorage and validate it
  */
 export function readPreviewSnapshot(): ReadmePreviewSnapshot | null {
+  return readPreviewSnapshotForProject();
+}
+
+export function readPreviewSnapshotForProject(projectId?: string | null): ReadmePreviewSnapshot | null {
   try {
-    const serialized = localStorage.getItem(PREVIEW_STORAGE_KEY);
+    const serialized = localStorage.getItem(getPreviewStorageKey(projectId));
     if (!serialized) {
       return null;
     }
@@ -120,8 +131,12 @@ export function readPreviewSnapshot(): ReadmePreviewSnapshot | null {
  * Check if the localStorage key exists at all (even if invalid)
  */
 export function hasPreviewSnapshotKey(): boolean {
+  return hasPreviewSnapshotKeyForProject();
+}
+
+export function hasPreviewSnapshotKeyForProject(projectId?: string | null): boolean {
   try {
-    return localStorage.getItem(PREVIEW_STORAGE_KEY) !== null;
+    return localStorage.getItem(getPreviewStorageKey(projectId)) !== null;
   } catch {
     return false;
   }
@@ -131,8 +146,12 @@ export function hasPreviewSnapshotKey(): boolean {
  * Read the raw, unvalidated localStorage content for diagnostics
  */
 export function readRawSnapshot(): string | null {
+  return readRawSnapshotForProject();
+}
+
+export function readRawSnapshotForProject(projectId?: string | null): string | null {
   try {
-    return localStorage.getItem(PREVIEW_STORAGE_KEY);
+    return localStorage.getItem(getPreviewStorageKey(projectId));
   } catch {
     return null;
   }

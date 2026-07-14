@@ -15,32 +15,13 @@ export const initialProject: ReadmeProject = {
   usage: 'npm run dev',
   license: 'MIT',
   repositoryUrl: 'https://github.com/thiago-pereira79/space-impacta',
-  deployUrl: 'https://space-impacta-demo.vercel.app',
-  websiteUrl: 'https://space-impacta.com',
+  deployUrl: 'https://thiago-pereira79.github.io/space-impacta/',
+  websiteUrl: '',
   authorName: 'Thiago Pereira',
-  authorEmail: 'contato@thiagopereira.dev',
+  authorEmail: 't.firmiano.79@gmail.com',
   authorUrl: 'https://github.com/thiago-pereira79',
-  linkedinUrl: 'https://linkedin.com/in/thiago-pereira',
-  screenshots: [
-    {
-      id: 'sc-1',
-      source: 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&w=600&q=80',
-      alt: 'Space Impacta Gameplay 1',
-      caption: 'Fase inicial do jogo com ondas de inimigos'
-    },
-    {
-      id: 'sc-2',
-      source: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
-      alt: 'Space Impacta Gameplay 2',
-      caption: 'Combate contra o chefe da segunda fase'
-    },
-    {
-      id: 'sc-3',
-      source: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=600&q=80',
-      alt: 'Space Impacta Settings',
-      caption: 'Tela de seleção de naves e customização'
-    }
-  ],
+  linkedinUrl: 'https://www.linkedin.com/in/thiago-pereira79/',
+  screenshots: [],
   optionalSections: {
     prerequisites: true,
     scripts: true,
@@ -57,7 +38,7 @@ export const initialProject: ReadmeProject = {
   roadmapContent: '- [x] Criar motor de física e colisão básico\n- [x] Implementar 3 tipos de inimigos\n- [ ] Adicionar suporte a controles físicos (Gamepad)\n- [ ] Criar ranking global online',
   contributingContent: 'Contribuições são muito bem-vindas! Sinta-se à vontade para abrir uma Issue ou criar um Pull Request.\n\n1. Faça um Fork do projeto\n2. Crie uma branch para sua feature (`git checkout -b feature/NovaFeature`)\n3. Faça o commit de suas alterações (`git commit -m \'Add NovaFeature\'`)\n4. Envie a branch (`git push origin feature/NovaFeature`)\n5. Abra um Pull Request',
   acknowledgementsContent: '- Comunidade de desenvolvedores de jogos indie no Brasil\n- Kenney.nl pelos excelentes assets visuais gratuitos em pixel art\n- Criadores do Vite pela velocidade impressionante do bundler',
-  contactContent: 'Caso queira conversar sobre o projeto, entre em contato através do e-mail contato@seuemail.com.',
+  contactContent: '',
   createdAt: new Date('2026-07-10T12:00:00Z').toISOString(),
   updatedAt: new Date('2026-07-11T07:00:00Z').toISOString()
 };
@@ -112,6 +93,14 @@ export interface ReadmeTemplate {
   project: Partial<ReadmeProject>;
 }
 
+function cloneTemplateData<T>(value: T): T {
+  if (typeof structuredClone === 'function') {
+    return structuredClone(value);
+  }
+
+  return JSON.parse(JSON.stringify(value)) as T;
+}
+
 export const readmeTemplates: ReadmeTemplate[] = [
   {
     id: 'tpl-space-impacta',
@@ -128,37 +117,47 @@ export const readmeTemplates: ReadmeTemplate[] = [
     description: 'Ideal para sistemas web modernos, dashboards e plataformas SaaS integradas.',
     icon: 'Layout',
     project: {
-      name: 'TaskFlow Dashboard',
-      description: 'Plataforma web de gerenciamento ágil de tarefas e projetos com suporte a Kanban, gráficos de produtividade e colaboração em tempo real.',
-      technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Recharts', 'lucide-react', 'motion'],
+      name: 'FlowDesk Dashboard',
+      description: 'Dashboard SaaS para organizar projetos, tarefas, metas e indicadores de produtividade de pequenas equipes em uma interface centralizada, responsiva e intuitiva.',
+      technologies: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Recharts', 'Zustand'],
       features: [
-        'Painel Kanban arrastar e soltar',
-        'Gráficos de produtividade interativos',
-        'Notificações em tempo real',
-        'Controle de prazos e metas'
+        'Dashboard com indicadores de produtividade e desempenho',
+        'Quadro Kanban para organização de tarefas',
+        'CRUD completo de projetos, tarefas e responsáveis',
+        'Filtros por status, prioridade, prazo e responsável',
+        'Gráficos interativos para acompanhamento de metas',
+        'Modo claro e escuro',
+        'Layout responsivo para desktop, tablet e celular',
+        'Persistência local dos dados do usuário'
       ],
-      installation: 'git clone https://github.com/usuario/taskflow.git\ncd taskflow\nnpm install\ncp .env.example .env',
+      installation: 'git clone https://github.com/seu-usuario/flowdesk-dashboard.git\ncd flowdesk-dashboard\nnpm install',
       usage: 'npm run dev',
       license: 'MIT',
+      repositoryUrl: '',
+      deployUrl: '',
+      websiteUrl: '',
+      authorName: '',
+      authorEmail: '',
+      authorUrl: '',
+      linkedinUrl: '',
+      screenshots: [],
       optionalSections: {
         prerequisites: true,
         scripts: true,
         folderStructure: true,
         roadmap: true,
         contributing: true,
-        authors: true,
+        authors: false,
         acknowledgements: false,
-        contact: true,
+        contact: false,
         tests: true
       },
-      prerequisitesContent: '- Node.js 18.x\n- Conta ativa no Firebase (opcional, para real-time)\n- Banco de dados local PostgreSQL ou Firebase Auth',
-      scriptsContent: '- `npm run dev`: Executa a aplicação em modo de desenvolvimento\n- `npm run build`: Compila o app otimizado para produção\n- `npm run lint`: Analisa o código em busca de erros de formatação',
-      folderStructureContent: '```text\nsrc/\n  ├── components/     # Componentes compartilhados\n  ├── context/        # Estados globais (Auth, Theme)\n  ├── hooks/          # Hooks customizados\n  ├── services/       # Integração com APIs externas\n  └── types/          # Arquivos de definição de tipos TS\n```',
-      roadmapContent: '- [x] Estrutura Kanban funcional\n- [x] Integração com banco de dados local\n- [ ] Integração com Google Agenda para prazos\n- [ ] Relatórios PDF automáticos semanais',
-      contributingContent: 'Abra um Pull Request descrevendo suas melhorias ou relate problemas abrindo uma Issue.',
-      authorsContent: '- **João Silva** - *Desenvolvedor Principal* - [@joaosilva](https://github.com/joaosilva)',
-      contactContent: 'Desenvolvido por João Silva - joao.silva@email.com',
-      testsContent: 'Execute a suíte de testes com:\n```bash\nnpm run test\n```'
+      prerequisitesContent: '- Node.js 20 ou superior\n- npm 10 ou superior\n- Navegador moderno com suporte a JavaScript',
+      scriptsContent: '- `npm run dev`: inicia o servidor de desenvolvimento\n- `npm run build`: gera a versão otimizada para produção\n- `npm run preview`: executa localmente o build de produção\n- `npm run lint`: verifica a qualidade do código\n- `npm run test`: executa os testes automatizados',
+      folderStructureContent: '```text\nsrc/\n├── components/     # Componentes reutilizáveis\n├── pages/          # Telas principais da aplicação\n├── store/          # Gerenciamento de estado\n├── services/       # Serviços e persistência de dados\n├── hooks/          # Hooks personalizados\n├── utils/          # Funções auxiliares\n└── types/          # Tipagens TypeScript\n```',
+      roadmapContent: '- [x] Dashboard com indicadores\n- [x] CRUD de projetos e tarefas\n- [x] Quadro Kanban\n- [x] Modo escuro\n- [ ] Autenticação de usuários\n- [ ] Colaboração em tempo real\n- [ ] Exportação de relatórios em PDF',
+      contributingContent: 'Contribuições são bem-vindas. Crie uma branch para sua alteração, realize os testes necessários e envie um Pull Request com uma descrição clara da melhoria.',
+      testsContent: 'Execute os testes com:\n```bash\nnpm run test\n```'
     }
   },
   {
@@ -169,34 +168,47 @@ export const readmeTemplates: ReadmeTemplate[] = [
     icon: 'Gamepad2',
     project: {
       name: 'Pixel Knight',
-      description: 'Jogo estilo metroidvania 2D pixel-art de aventura e combate hack-and-slash desenvolvido em motor HTML5.',
-      technologies: ['HTML5 Canvas', 'TypeScript', 'Phaser3', 'Web Audio API'],
+      description: 'Jogo de aventura e ação em pixel art no qual o jogador explora ruínas antigas, enfrenta criaturas, coleta habilidades e desbloqueia novas regiões do mapa.',
+      technologies: ['TypeScript', 'Phaser 3', 'Vite', 'HTML5 Canvas', 'Web Audio API', 'Vitest'],
       features: [
-        'Movimentação fluida baseada em frames',
-        'Áudio posicional de efeitos e trilhas',
-        'Inteligência artificial básica para inimigos',
-        'Sistema de inventário e upgrades de armas'
+        'Movimentação fluida com corrida, salto e esquiva',
+        'Sistema de combate corpo a corpo',
+        'Inimigos com diferentes padrões de comportamento',
+        'Sistema de vida, dano e invencibilidade temporária',
+        'Checkpoints e progressão entre áreas',
+        'Itens colecionáveis e melhorias de habilidades',
+        'Suporte a teclado e gamepad',
+        'Trilha sonora e efeitos sonoros dinâmicos'
       ],
-      installation: 'git clone https://github.com/seu-github/pixel-knight.git\ncd pixel-knight\nnpm install',
-      usage: 'npm start',
-      license: 'GPL 3.0',
+      installation: 'git clone https://github.com/seu-usuario/pixel-knight.git\ncd pixel-knight\nnpm install',
+      usage: 'npm run dev',
+      license: 'MIT',
+      repositoryUrl: '',
+      deployUrl: '',
+      websiteUrl: '',
+      authorName: '',
+      authorEmail: '',
+      authorUrl: '',
+      linkedinUrl: '',
+      screenshots: [],
       optionalSections: {
         prerequisites: true,
         scripts: true,
-        folderStructure: false,
+        folderStructure: true,
         roadmap: true,
         contributing: true,
         authors: false,
         acknowledgements: true,
-        contact: true,
-        tests: false
+        contact: false,
+        tests: true
       },
-      prerequisitesContent: '- Qualquer navegador moderno com suporte a WebGL\n- Node.js instalado para o servidor local de testes',
-      scriptsContent: '- `npm start`: Inicia o servidor Webpack Dev e abre no navegador\n- `npm run build`: Gera o bundle final de produção em `/dist`',
-      roadmapContent: '- [x] Implementação física de pulo duplo e esquiva\n- [ ] Criação do mapa da Floresta Sombria\n- [ ] Lançamento oficial na plataforma itch.io',
-      contributingContent: 'Se deseja colaborar com arte, áudio ou código, veja nosso guia de contribuição.',
-      acknowledgementsContent: '- Comunidade Phaser pelos excelentes plugins open source\n- Artista do OpenGameArt que desenhou os tilesets medievais',
-      contactContent: 'Para parcerias e contato: dev@pixelknightgame.com'
+      prerequisitesContent: '- Node.js 20 ou superior\n- Navegador com suporte a HTML5 Canvas\n- Teclado ou controle compatível',
+      scriptsContent: '- `npm run dev`: inicia o jogo em modo de desenvolvimento\n- `npm run build`: gera os arquivos de produção\n- `npm run preview`: executa o build localmente\n- `npm run test`: executa os testes automatizados',
+      folderStructureContent: '```text\nsrc/\n├── scenes/         # Cenas e fases do jogo\n├── entities/       # Jogador, inimigos e objetos\n├── systems/        # Combate, colisão e progressão\n├── assets/         # Imagens, sons e fontes\n├── config/         # Configurações gerais\n└── utils/          # Funções auxiliares\n```',
+      roadmapContent: '- [x] Movimentação principal\n- [x] Sistema básico de combate\n- [x] Primeira região jogável\n- [ ] Sistema completo de chefes\n- [ ] Novas habilidades desbloqueáveis\n- [ ] Suporte a salvamento em nuvem',
+      contributingContent: 'Abra uma Issue antes de implementar alterações maiores. Para correções e melhorias menores, crie uma branch e envie um Pull Request com os testes realizados.',
+      acknowledgementsContent: '- Comunidade Phaser\n- Projetos open source de jogos em HTML5\n- Artistas independentes de pixel art',
+      testsContent: '```bash\nnpm run test\n```'
     }
   },
   {
@@ -206,36 +218,48 @@ export const readmeTemplates: ReadmeTemplate[] = [
     description: 'Focado em APIs backend, microsserviços e documentações de endpoints.',
     icon: 'Server',
     project: {
-      name: 'E-Commerce Core API',
-      description: 'API de alta performance para controle de carrinhos, estoque, cálculo de frete e checkout seguro.',
-      technologies: ['Node.js', 'Express', 'TypeScript', 'Prisma ORM', 'Docker', 'Redis'],
+      name: 'CommerceCore API',
+      description: 'API para gerenciamento de produtos, clientes, pedidos e estoque, desenvolvida com arquitetura modular, autenticação segura e documentação interativa.',
+      technologies: ['Node.js', 'Express', 'TypeScript', 'Prisma ORM', 'PostgreSQL', 'Swagger', 'Vitest'],
       features: [
-        'Autenticação JWT com Refresh Tokens',
-        'Cálculo de rotas e entrega integrado aos Correios',
-        'Garantia de concorrência de estoque com filas Redis',
-        'Documentação OpenAPI/Swagger interativa completa'
+        'Cadastro e autenticação de usuários',
+        'Controle de permissões por perfil',
+        'CRUD de produtos, clientes e pedidos',
+        'Controle de estoque',
+        'Paginação, filtros e ordenação',
+        'Validação de dados de entrada',
+        'Tratamento centralizado de erros',
+        'Documentação interativa com Swagger',
+        'Testes unitários e de integração'
       ],
-      installation: 'git clone https://github.com/backend-dev/ecommerce-api.git\ncd ecommerce-api\nnpm install\ndocker-compose up -d',
-      usage: 'npm run migrate && npm run dev',
+      installation: 'git clone https://github.com/seu-usuario/commercecore-api.git\ncd commercecore-api\nnpm install\ncp .env.example .env\nnpx prisma migrate dev',
+      usage: 'npm run dev',
       license: 'MIT',
+      repositoryUrl: '',
+      deployUrl: '',
+      websiteUrl: '',
+      authorName: '',
+      authorEmail: '',
+      authorUrl: '',
+      linkedinUrl: '',
+      screenshots: [],
       optionalSections: {
         prerequisites: true,
         scripts: true,
         folderStructure: true,
-        roadmap: false,
+        roadmap: true,
         contributing: true,
-        authors: true,
+        authors: false,
         acknowledgements: false,
-        contact: true,
+        contact: false,
         tests: true
       },
-      prerequisitesContent: '- Docker instalado na máquina\n- Node.js v18.x\n- Chaves de sandbox para gateway de pagamento',
-      scriptsContent: '- `npm run dev`: Executa a API com ts-node-dev e monitoramento de mudanças\n- `npm run migrate`: Roda as migrações do banco Prisma\n- `npm test`: Executa testes unitários e de integração com Jest',
-      folderStructureContent: '```text\nsrc/\n  ├── controllers/    # Controladores de rotas HTTP\n  ├── middlewares/    # Validações, tratamento de erro e Auth\n  ├── prisma/         # Esquema de dados e migrations\n  ├── services/       # Regras de negócios isoladas\n  └── config/         # Configurações de serviços e conexões\n```',
-      contributingContent: 'Abra issues detalhando bugs ou envie PRs de melhoria. Siga as convenções de commits descritas em Conventional Commits.',
-      authorsContent: '- **Ana Clara** - *Tech Lead Backend* - [@anaclara](https://github.com/anaclara)',
-      contactContent: 'E-mail para suporte: api-support@ecommercecore.com',
-      testsContent: 'Suíte completa de testes via:\n```bash\nnpm run test\nnpm run test:coverage\n```'
+      prerequisitesContent: '- Node.js 20 ou superior\n- PostgreSQL instalado ou disponível em container\n- Arquivo `.env` configurado',
+      scriptsContent: '- `npm run dev`: inicia a API em desenvolvimento\n- `npm run build`: compila o projeto\n- `npm run start`: executa a versão de produção\n- `npm run test`: executa os testes\n- `npm run prisma:migrate`: executa as migrações\n- `npm run prisma:studio`: abre o painel do Prisma',
+      folderStructureContent: '```text\nsrc/\n├── controllers/    # Controladores das rotas\n├── services/       # Regras de negócio\n├── repositories/   # Acesso aos dados\n├── routes/         # Definição dos endpoints\n├── middlewares/    # Autenticação e validações\n├── schemas/        # Esquemas de validação\n├── config/         # Configurações da aplicação\n└── tests/          # Testes automatizados\n```',
+      roadmapContent: '- [x] CRUD de produtos\n- [x] CRUD de clientes\n- [x] Controle de pedidos\n- [x] Documentação Swagger\n- [ ] Integração com gateway de pagamento\n- [ ] Sistema de filas\n- [ ] Cache com Redis\n- [ ] Monitoramento e métricas',
+      contributingContent: 'Crie uma branch a partir da `main`, siga os padrões do projeto e envie um Pull Request acompanhado dos testes correspondentes.',
+      testsContent: '```bash\nnpm run test\nnpm run test:coverage\n```'
     }
   },
   {
@@ -245,34 +269,48 @@ export const readmeTemplates: ReadmeTemplate[] = [
     description: 'Perfeito para apps Android, iOS ou multi-plataforma (React Native, Flutter).',
     icon: 'Smartphone',
     project: {
-      name: 'FitPulse App',
-      description: 'Aplicativo mobile para monitoramento físico, agendamento de treinos, cálculo de IMC e rastreamento de hidratação diária com lembretes.',
-      technologies: ['React Native', 'Expo', 'TypeScript', 'AsyncStorage', 'NativeWind'],
+      name: 'FitPulse',
+      description: 'Aplicativo mobile para acompanhamento de hábitos saudáveis, hidratação, exercícios, metas pessoais e evolução física, com funcionamento offline.',
+      technologies: ['Flutter', 'Dart', 'Hive', 'fl_chart', 'flutter_local_notifications'],
       features: [
-        'Lembretes diários por notificações locais push',
-        'Rastreador de consumo de água interativo',
-        'Gráficos de evolução de peso e exercícios',
-        'Funcionamento 100% offline'
+        'Registro diário de hidratação',
+        'Criação de hábitos e metas pessoais',
+        'Acompanhamento de exercícios',
+        'Histórico de atividades',
+        'Gráficos de evolução',
+        'Notificações locais personalizadas',
+        'Funcionamento offline',
+        'Interface adaptada para Android e iOS',
+        'Modo claro e escuro'
       ],
-      installation: 'git clone https://github.com/appdev/fitpulse.git\ncd fitpulse\nnpm install',
-      usage: 'npx expo start',
-      license: 'Apache 2.0',
+      installation: 'git clone https://github.com/seu-usuario/fitpulse.git\ncd fitpulse\nflutter pub get',
+      usage: 'flutter run',
+      license: 'MIT',
+      repositoryUrl: '',
+      deployUrl: '',
+      websiteUrl: '',
+      authorName: '',
+      authorEmail: '',
+      authorUrl: '',
+      linkedinUrl: '',
+      screenshots: [],
       optionalSections: {
         prerequisites: true,
         scripts: true,
-        folderStructure: false,
+        folderStructure: true,
         roadmap: true,
         contributing: true,
         authors: false,
         acknowledgements: false,
-        contact: true,
-        tests: false
+        contact: false,
+        tests: true
       },
-      prerequisitesContent: '- Aplicativo Expo Go instalado no smartphone Android/iOS\n- Ou emulador Android Studio / simulador Xcode configurado',
-      scriptsContent: '- `npx expo start`: Abre o painel Metro Bundler\n- `npm run android`: Roda o app direto no emulador Android conectado\n- `npm run ios`: Roda o app direto no emulador iOS local',
-      roadmapContent: '- [x] Login e perfil de usuário\n- [x] Cronômetro e lembretes de hidratação\n- [ ] Sincronização automática com Apple Health e Google Fit\n- [ ] Compartilhamento de conquistas nas redes sociais',
-      contributingContent: 'Forks são bem-vindos. Garanta que o código passe no ESLint do Expo antes de submeter.',
-      contactContent: 'Dúvidas ou feedbacks no e-mail: mobile-support@fitpulse.app'
+      prerequisitesContent: '- Flutter SDK instalado\n- Dart SDK compatível\n- Android Studio, Xcode ou dispositivo físico\n- Emulador Android ou simulador iOS configurado',
+      scriptsContent: '- `flutter run`: executa o aplicativo\n- `flutter test`: executa os testes\n- `flutter analyze`: verifica problemas no código\n- `flutter build apk`: gera o aplicativo Android\n- `flutter build ios`: gera a versão para iOS',
+      folderStructureContent: '```text\nlib/\n├── screens/        # Telas do aplicativo\n├── widgets/        # Componentes reutilizáveis\n├── models/         # Modelos de dados\n├── services/       # Persistência e notificações\n├── providers/      # Gerenciamento de estado\n├── theme/          # Tema e identidade visual\n└── utils/          # Funções auxiliares\n```',
+      roadmapContent: '- [x] Controle de hidratação\n- [x] Cadastro de hábitos\n- [x] Notificações locais\n- [x] Gráficos de evolução\n- [ ] Sincronização entre dispositivos\n- [ ] Integração com Google Fit\n- [ ] Integração com Apple Health',
+      contributingContent: 'Antes de enviar alterações, execute `flutter analyze` e `flutter test`. Explique claramente a melhoria realizada no Pull Request.',
+      testsContent: '```bash\nflutter test\n```'
     }
   },
   {
@@ -283,33 +321,46 @@ export const readmeTemplates: ReadmeTemplate[] = [
     icon: 'Code2',
     project: {
       name: 'date-utils-ptbr',
-      description: 'Biblioteca ultra leve em TypeScript para formatação, validação e manipulação de datas no padrão brasileiro, incluindo suporte a feriados nacionais e anos bissextos.',
-      technologies: ['TypeScript', 'esbuild', 'Vitest', 'NPM'],
+      description: 'Biblioteca leve em TypeScript para formatação, validação e manipulação de datas no padrão brasileiro.',
+      technologies: ['TypeScript', 'tsup', 'Vitest', 'npm', 'ESLint'],
       features: [
-        'Tamanho extremamente reduzido (< 2KB gzip)',
-        'Suporte a todos os feriados móveis brasileiros (Páscoa, Carnaval, etc.)',
-        'Formatação intuitiva em português brasileiro',
-        'Compatível com ESModules e CommonJS'
+        'Formatação de datas no padrão brasileiro',
+        'Conversão entre texto e objetos Date',
+        'Validação de datas',
+        'Cálculo de intervalos entre datas',
+        'Identificação de anos bissextos',
+        'Suporte a feriados nacionais',
+        'Compatibilidade com ESM e CommonJS',
+        'Tipagens TypeScript incluídas',
+        'Suporte a tree shaking'
       ],
       installation: 'npm install date-utils-ptbr',
-      usage: '```typescript\nimport { formatarDataExtenso, ehFeriado } from \'date-utils-ptbr\';\n\nconst hoje = new Date();\nconsole.log(formatarDataExtenso(hoje));\n// Ex: "Sábado, 11 de Julho de 2026"\n\nconsole.log(ehFeriado(hoje)); // false ou true\n```',
+      usage: '```typescript\nimport { formatarData, diferencaEmDias } from \'date-utils-ptbr\';\n\nconst data = new Date(2026, 6, 14);\n\nconsole.log(formatarData(data));\n// 14/07/2026\n\nconsole.log(diferencaEmDias(\n  new Date(2026, 6, 14),\n  new Date(2026, 6, 20)\n));\n// 6\n```',
       license: 'MIT',
+      repositoryUrl: '',
+      deployUrl: '',
+      websiteUrl: '',
+      authorName: '',
+      authorEmail: '',
+      authorUrl: '',
+      linkedinUrl: '',
+      screenshots: [],
       optionalSections: {
         prerequisites: false,
         scripts: true,
-        folderStructure: false,
-        roadmap: false,
+        folderStructure: true,
+        roadmap: true,
         contributing: true,
-        authors: true,
+        authors: false,
         acknowledgements: false,
-        contact: true,
+        contact: false,
         tests: true
       },
-      scriptsContent: '- `npm run build`: Compila a biblioteca para ESM e CJS utilizando esbuild\n- `npm run test`: Executa os testes de formatação com Vitest\n- `npm run benchmark`: Compara a performance com outras bibliotecas populares',
-      contributingContent: 'Reporte bugs abrindo Issues ou crie um PR com novos métodos e utilitários úteis.',
-      authorsContent: '- **Carla Mendes** - *Criadora da lib* - [@carlamendes](https://github.com/carlamendes)',
-      contactContent: 'Mande sugestões em carla.mendes@email.com',
-      testsContent: 'A biblioteca conta com 100% de cobertura de código. Teste localmente executando:\n```bash\nnpm run test\n```'
+      scriptsContent: '- `npm run build`: gera as versões ESM e CommonJS\n- `npm run test`: executa os testes\n- `npm run lint`: verifica a qualidade do código\n- `npm run typecheck`: executa a verificação do TypeScript',
+      folderStructureContent: '```text\nsrc/\n├── formatters/     # Funções de formatação\n├── validators/     # Validações de datas\n├── calculators/    # Cálculos e intervalos\n├── holidays/       # Regras de feriados\n├── types/          # Tipagens públicas\n└── index.ts        # Exportações da biblioteca\n```',
+      roadmapContent: '- [x] Formatação de datas\n- [x] Validação de datas\n- [x] Cálculo de intervalos\n- [ ] Feriados estaduais\n- [ ] Localização para outros países\n- [ ] Plugin para frameworks front-end',
+      contributingContent: 'Novas funções devem incluir documentação, tipagem completa e testes automatizados.',
+      testsContent: '```bash\nnpm run test\nnpm run typecheck\n```'
     }
   },
   {
@@ -320,31 +371,48 @@ export const readmeTemplates: ReadmeTemplate[] = [
     icon: 'User',
     project: {
       name: 'DevPortfolio',
-      description: 'Portfólio elegante, minimalista e de alta velocidade para exibir projetos de desenvolvimento, experiência profissional e links de contato.',
-      technologies: ['Vite', 'React', 'motion', 'Tailwind CSS', 'EmailJS'],
+      description: 'Portfólio pessoal minimalista e responsivo para apresentar projetos, experiências, habilidades e formas de contato.',
+      technologies: ['React', 'TypeScript', 'Vite', 'Motion', 'CSS Modules', 'EmailJS'],
       features: [
-        'Formulário de contato direto e validado funcional via EmailJS',
-        'Animações de rolagem suaves e fluidas',
-        'Bento Grid de projetos em destaque',
-        'Suporte completo a acessibilidade (leitores de tela)'
+        'Página inicial com apresentação profissional',
+        'Projetos exibidos em formato de estudos de caso',
+        'Seção de habilidades e tecnologias',
+        'Linha do tempo de experiências',
+        'Formulário de contato',
+        'Modo claro e escuro',
+        'Animações suaves e acessíveis',
+        'SEO básico e metadados sociais',
+        'Layout responsivo',
+        'Navegação por teclado e suporte a leitores de tela'
       ],
-      installation: 'git clone https://github.com/seu-portfolio.git\ncd seu-portfolio\nnpm install',
+      installation: 'git clone https://github.com/seu-usuario/devportfolio.git\ncd devportfolio\nnpm install',
       usage: 'npm run dev',
       license: 'MIT',
+      repositoryUrl: '',
+      deployUrl: '',
+      websiteUrl: '',
+      authorName: '',
+      authorEmail: '',
+      authorUrl: '',
+      linkedinUrl: '',
+      screenshots: [],
       optionalSections: {
-        prerequisites: false,
+        prerequisites: true,
         scripts: true,
-        folderStructure: false,
-        roadmap: false,
+        folderStructure: true,
+        roadmap: true,
         contributing: false,
         authors: false,
         acknowledgements: true,
-        contact: true,
-        tests: false
+        contact: false,
+        tests: true
       },
-      scriptsContent: '- `npm run dev`: Executa em desenvolvimento local rápido\n- `npm run build`: Gera os arquivos estáticos otimizados para hospedagem (Vercel, Netlify, Github Pages)',
-      acknowledgementsContent: '- Inspirações de design retiradas do Dribbble e Behance\n- Fontes providas pelo Google Fonts',
-      contactContent: 'Disponível para freelance e novas oportunidades! Conecte-se comigo no LinkedIn ou mande mensagem pelo formulário.'
+      prerequisitesContent: '- Node.js 20 ou superior\n- npm 10 ou superior',
+      scriptsContent: '- `npm run dev`: inicia o ambiente de desenvolvimento\n- `npm run build`: gera o portfólio para produção\n- `npm run preview`: visualiza o build localmente\n- `npm run lint`: verifica o código\n- `npm run test`: executa os testes',
+      folderStructureContent: '```text\nsrc/\n├── components/     # Componentes reutilizáveis\n├── sections/       # Seções da página\n├── pages/          # Páginas e estudos de caso\n├── data/           # Dados dos projetos\n├── assets/         # Imagens e arquivos visuais\n├── styles/         # Estilos globais\n└── utils/          # Funções auxiliares\n```',
+      roadmapContent: '- [x] Página inicial\n- [x] Seção de projetos\n- [x] Formulário de contato\n- [x] Responsividade\n- [ ] Painel para editar projetos\n- [ ] Blog integrado\n- [ ] Internacionalização',
+      acknowledgementsContent: '- Comunidade React\n- Projetos open source de acessibilidade\n- Referências de design e desenvolvimento disponíveis na comunidade',
+      testsContent: '```bash\nnpm run test\n```'
     }
   },
   {
@@ -354,335 +422,519 @@ export const readmeTemplates: ReadmeTemplate[] = [
     description: 'Estrutura completa para teses, artigos científicos, pesquisas ou Trabalhos de Conclusão de Curso (TCC).',
     icon: 'GraduationCap',
     project: {
-      name: 'Análise Epidemiológica SmartData',
-      description: 'Projeto de pesquisa e desenvolvimento focado na modelagem computacional da propagação de patógenos em ambientes urbanos densos.',
-      technologies: ['Python', 'Jupyter Notebook', 'Pandas', 'Matplotlib', 'LaTeX'],
+      name: 'BioData — Análise de Biodiversidade Urbana',
+      description: 'Projeto acadêmico para organização, tratamento e visualização de dados sobre biodiversidade em áreas urbanas.',
+      technologies: ['Python', 'Jupyter Notebook', 'Pandas', 'Matplotlib', 'GeoPandas', 'Pytest'],
       features: [
-        'Modelos de simulação computacional SEIR',
-        'Processamento estatístico de dados demográficos reais',
-        'Visualização gráfica interativa das curvas de contágio',
-        'Exportação automática de relatórios acadêmicos formatados'
+        'Importação de dados em CSV',
+        'Limpeza e padronização dos registros',
+        'Identificação de espécies observadas',
+        'Cálculo de indicadores de diversidade',
+        'Comparação entre diferentes regiões',
+        'Visualização de dados em gráficos',
+        'Geração de mapas de distribuição',
+        'Notebooks reproduzíveis',
+        'Exportação de resultados para relatórios'
       ],
-      installation: 'git clone https://github.com/usuario/pesquisa-epidemiologica.git\ncd pesquisa-epidemiologica\npip install -r requirements.txt',
-      usage: 'jupyter notebook simulacao.ipynb',
+      installation: 'git clone https://github.com/seu-usuario/biodata.git\ncd biodata\npython -m venv .venv\npip install -r requirements.txt',
+      usage: 'jupyter notebook notebooks/analise_biodiversidade.ipynb',
       license: 'MIT',
-      authorName: 'Dra. Helena Souza',
+      repositoryUrl: '',
+      deployUrl: '',
+      websiteUrl: '',
+      authorName: '',
+      authorEmail: '',
+      authorUrl: '',
+      linkedinUrl: '',
+      screenshots: [],
       optionalSections: {
         prerequisites: true,
         scripts: false,
         folderStructure: true,
-        roadmap: false,
-        contributing: false,
-        authors: true,
+        roadmap: true,
+        contributing: true,
+        authors: false,
         acknowledgements: true,
-        contact: true,
-        tests: false
+        contact: false,
+        tests: true
       },
-      prerequisitesContent: '- Python 3.10 ou superior\n- Ambiente virtual (venv) configurado\n- Instalação local do compilador LaTeX (para geração de relatórios)',
-      folderStructureContent: '```text\ndata/\n  ├── raw/            # Dados brutos anonimizados\n  └── processed/      # Dados limpos para modelagem\nnotebooks/            # Experimentos e rascunhos de análises\nsrc/\n  ├── model/          # Implementação das equações diferenciais\n  └── visualization/  # Scripts de plotagem e mapas\n```',
-      authorsContent: '- **Dra. Helena Souza** - *Pesquisadora Principal* - [Lattes](http://lattes.cnpq.br/0000)\n- **Dr. Arthur Lima** - *Co-orientador* - [Lattes](http://lattes.cnpq.br/1111)',
-      acknowledgementsContent: '- Ao CNPq pelo apoio financeiro e bolsas de pesquisa concedidas\n- Ao Departamento de Computação Científica da Universidade Federal',
-      contactContent: 'Contato para dúvidas acadêmicas: helena.souza@universidade.edu'
+      prerequisitesContent: '- Python 3.11 ou superior\n- Ambiente virtual Python\n- Jupyter Notebook ou JupyterLab\n- Arquivos de dados em formato CSV',
+      folderStructureContent: '```text\ndata/\n├── raw/             # Dados originais\n└── processed/       # Dados tratados\n\nnotebooks/\n├── exploracao.ipynb\n└── analise_biodiversidade.ipynb\n\nsrc/\n├── cleaning/        # Limpeza dos dados\n├── analysis/        # Funções de análise\n├── visualization/   # Gráficos e mapas\n└── utils/           # Funções auxiliares\n\ntests/               # Testes automatizados\nreports/             # Relatórios exportados\n```',
+      roadmapContent: '- [x] Importação dos dados\n- [x] Limpeza e padronização\n- [x] Gráficos exploratórios\n- [ ] Mapas interativos\n- [ ] Comparação entre períodos\n- [ ] Painel web para consulta pública',
+      contributingContent: 'Contribuições devem preservar a rastreabilidade dos dados e explicar qualquer alteração realizada nos métodos de análise.',
+      acknowledgementsContent: '- Comunidades científicas de dados abertos\n- Pesquisadores e observadores responsáveis pelos registros\n- Desenvolvedores das bibliotecas científicas utilizadas',
+      testsContent: '```bash\npytest\n```'
     }
   }
 ];
 
+type TemplateLocale = 'en-US' | 'es-419';
+
+type TemplateLocalization = Partial<Omit<ReadmeTemplate, 'id' | 'project'>> & {
+  project: Partial<ReadmeProject>;
+};
+
+const fictionalTemplateLocalizations: Record<TemplateLocale, Record<string, TemplateLocalization>> = {
+  'en-US': {
+    'tpl-web-app': {
+      name: 'Web Application (SaaS)',
+      category: 'SaaS / Web',
+      description: 'Ideal for modern web systems, dashboards, and integrated SaaS platforms.',
+      project: {
+        name: 'FlowDesk Dashboard',
+        description: 'SaaS dashboard for organizing projects, tasks, goals, and productivity indicators for small teams in a centralized, responsive, and intuitive interface.',
+        features: [
+          'Dashboard with productivity and performance indicators',
+          'Kanban board for task organization',
+          'Complete CRUD for projects, tasks, and assignees',
+          'Filters by status, priority, due date, and assignee',
+          'Interactive charts for goal tracking',
+          'Light and dark mode',
+          'Responsive layout for desktop, tablet, and mobile',
+          'Local persistence of user data'
+        ],
+        prerequisitesContent: '- Node.js 20 or higher\n- npm 10 or higher\n- Modern browser with JavaScript support',
+        scriptsContent: '- `npm run dev`: starts the development server\n- `npm run build`: generates the optimized production version\n- `npm run preview`: runs the production build locally\n- `npm run lint`: checks code quality\n- `npm run test`: runs automated tests',
+        folderStructureContent: '```text\nsrc/\n├── components/     # Reusable components\n├── pages/          # Main application screens\n├── store/          # State management\n├── services/       # Services and data persistence\n├── hooks/          # Custom hooks\n├── utils/          # Helper functions\n└── types/          # TypeScript typings\n```',
+        roadmapContent: '- [x] Dashboard with indicators\n- [x] Project and task CRUD\n- [x] Kanban board\n- [x] Dark mode\n- [ ] User authentication\n- [ ] Real-time collaboration\n- [ ] PDF report export',
+        contributingContent: 'Contributions are welcome. Create a branch for your change, run the necessary tests, and submit a Pull Request with a clear description of the improvement.',
+        authorsContent: '',
+        contactContent: '',
+        testsContent: 'Run the tests with:\n```bash\nnpm run test\n```'
+      }
+    },
+    'tpl-game': {
+      name: 'Game (2D/3D)',
+      category: 'Games',
+      description: 'Layout for indie, web, mobile, or desktop games.',
+      project: {
+        name: 'Pixel Knight',
+        description: 'Pixel art action-adventure game where the player explores ancient ruins, fights creatures, collects abilities, and unlocks new map regions.',
+        features: [
+          'Fluid movement with running, jumping, and dodging',
+          'Melee combat system',
+          'Enemies with different behavior patterns',
+          'Health, damage, and temporary invincibility system',
+          'Checkpoints and progression between areas',
+          'Collectible items and ability upgrades',
+          'Keyboard and gamepad support',
+          'Dynamic soundtrack and sound effects'
+        ],
+        prerequisitesContent: '- Node.js 20 or higher\n- Browser with HTML5 Canvas support\n- Compatible keyboard or controller',
+        scriptsContent: '- `npm run dev`: starts the game in development mode\n- `npm run build`: generates production files\n- `npm run preview`: runs the build locally\n- `npm run test`: runs automated tests',
+        folderStructureContent: '```text\nsrc/\n├── scenes/         # Game scenes and levels\n├── entities/       # Player, enemies, and objects\n├── systems/        # Combat, collision, and progression\n├── assets/         # Images, sounds, and fonts\n├── config/         # General settings\n└── utils/          # Helper functions\n```',
+        roadmapContent: '- [x] Core movement\n- [x] Basic combat system\n- [x] First playable region\n- [ ] Complete boss system\n- [ ] New unlockable abilities\n- [ ] Cloud save support',
+        contributingContent: 'Open an Issue before implementing larger changes. For smaller fixes and improvements, create a branch and submit a Pull Request with the tests performed.',
+        acknowledgementsContent: '- Phaser community\n- Open source HTML5 game projects\n- Independent pixel art artists',
+        contactContent: '',
+        testsContent: '```bash\nnpm run test\n```'
+      }
+    },
+    'tpl-api': {
+      name: 'REST / GraphQL API',
+      category: 'Backend',
+      description: 'Focused on backend APIs, microservices, and endpoint documentation.',
+      project: {
+        name: 'CommerceCore API',
+        description: 'API for managing products, customers, orders, and inventory, built with modular architecture, secure authentication, and interactive documentation.',
+        features: [
+          'User registration and authentication',
+          'Role-based permission control',
+          'CRUD for products, customers, and orders',
+          'Inventory control',
+          'Pagination, filters, and sorting',
+          'Input data validation',
+          'Centralized error handling',
+          'Interactive Swagger documentation',
+          'Unit and integration tests'
+        ],
+        prerequisitesContent: '- Node.js 20 or higher\n- PostgreSQL installed or available in a container\n- Configured `.env` file',
+        scriptsContent: '- `npm run dev`: starts the API in development\n- `npm run build`: compiles the project\n- `npm run start`: runs the production version\n- `npm run test`: runs the tests\n- `npm run prisma:migrate`: runs migrations\n- `npm run prisma:studio`: opens the Prisma panel',
+        folderStructureContent: '```text\nsrc/\n├── controllers/    # Route controllers\n├── services/       # Business rules\n├── repositories/   # Data access\n├── routes/         # Endpoint definitions\n├── middlewares/    # Authentication and validations\n├── schemas/        # Validation schemas\n├── config/         # Application settings\n└── tests/          # Automated tests\n```',
+        roadmapContent: '- [x] Product CRUD\n- [x] Customer CRUD\n- [x] Order control\n- [x] Swagger documentation\n- [ ] Payment gateway integration\n- [ ] Queue system\n- [ ] Redis cache\n- [ ] Monitoring and metrics',
+        contributingContent: 'Create a branch from `main`, follow the project standards, and submit a Pull Request with the corresponding tests.',
+        authorsContent: '',
+        contactContent: '',
+        testsContent: '```bash\nnpm run test\nnpm run test:coverage\n```'
+      }
+    },
+    'tpl-mobile': {
+      name: 'Mobile App',
+      category: 'Mobile',
+      description: 'Perfect for Android, iOS, or cross-platform apps.',
+      project: {
+        name: 'FitPulse',
+        description: 'Mobile app for tracking healthy habits, hydration, exercises, personal goals, and physical progress with offline support.',
+        features: [
+          'Daily hydration tracking',
+          'Creation of habits and personal goals',
+          'Exercise tracking',
+          'Activity history',
+          'Progress charts',
+          'Custom local notifications',
+          'Offline operation',
+          'Interface adapted for Android and iOS',
+          'Light and dark mode'
+        ],
+        prerequisitesContent: '- Flutter SDK installed\n- Compatible Dart SDK\n- Android Studio, Xcode, or physical device\n- Configured Android emulator or iOS simulator',
+        scriptsContent: '- `flutter run`: runs the app\n- `flutter test`: runs the tests\n- `flutter analyze`: checks code issues\n- `flutter build apk`: generates the Android app\n- `flutter build ios`: generates the iOS version',
+        folderStructureContent: '```text\nlib/\n├── screens/        # App screens\n├── widgets/        # Reusable components\n├── models/         # Data models\n├── services/       # Persistence and notifications\n├── providers/      # State management\n├── theme/          # Theme and visual identity\n└── utils/          # Helper functions\n```',
+        roadmapContent: '- [x] Hydration tracking\n- [x] Habit registration\n- [x] Local notifications\n- [x] Progress charts\n- [ ] Device synchronization\n- [ ] Google Fit integration\n- [ ] Apple Health integration',
+        contributingContent: 'Before submitting changes, run `flutter analyze` and `flutter test`. Clearly explain the improvement in the Pull Request.',
+        contactContent: '',
+        testsContent: '```bash\nflutter test\n```'
+      }
+    },
+    'tpl-library': {
+      name: 'Library / NPM Package',
+      category: 'Utilities / Packages',
+      description: 'Focused on reusable packages, utilities, hooks, libraries, or plugins.',
+      project: {
+        name: 'date-utils-ptbr',
+        description: 'Lightweight TypeScript library for formatting, validating, and manipulating dates in the Brazilian standard.',
+        features: [
+          'Date formatting in the Brazilian standard',
+          'Conversion between text and Date objects',
+          'Date validation',
+          'Interval calculation between dates',
+          'Leap year identification',
+          'Support for Brazilian national holidays',
+          'ESM and CommonJS compatibility',
+          'Included TypeScript typings',
+          'Tree shaking support'
+        ],
+        scriptsContent: '- `npm run build`: generates ESM and CommonJS versions\n- `npm run test`: runs tests\n- `npm run lint`: checks code quality\n- `npm run typecheck`: runs TypeScript verification',
+        folderStructureContent: '```text\nsrc/\n├── formatters/     # Formatting functions\n├── validators/     # Date validations\n├── calculators/    # Calculations and intervals\n├── holidays/       # Holiday rules\n├── types/          # Public typings\n└── index.ts        # Library exports\n```',
+        roadmapContent: '- [x] Date formatting\n- [x] Date validation\n- [x] Interval calculation\n- [ ] State holidays\n- [ ] Localization for other countries\n- [ ] Plugin for front-end frameworks',
+        contributingContent: 'New functions must include documentation, complete typing, and automated tests.',
+        authorsContent: '',
+        contactContent: '',
+        testsContent: '```bash\nnpm run test\nnpm run typecheck\n```'
+      }
+    },
+    'tpl-portfolio': {
+      name: 'Portfolio Website',
+      category: 'Personal',
+      description: 'Perfect for developers to display their work, contact information, and projects.',
+      project: {
+        name: 'DevPortfolio',
+        description: 'Minimalist and responsive personal portfolio for presenting projects, experience, skills, and contact options.',
+        features: [
+          'Home page with professional introduction',
+          'Projects displayed as case studies',
+          'Skills and technologies section',
+          'Experience timeline',
+          'Contact form',
+          'Light and dark mode',
+          'Smooth and accessible animations',
+          'Basic SEO and social metadata',
+          'Responsive layout',
+          'Keyboard navigation and screen reader support'
+        ],
+        prerequisitesContent: '- Node.js 20 or higher\n- npm 10 or higher',
+        scriptsContent: '- `npm run dev`: starts the development environment\n- `npm run build`: generates the portfolio for production\n- `npm run preview`: previews the build locally\n- `npm run lint`: checks the code\n- `npm run test`: runs the tests',
+        folderStructureContent: '```text\nsrc/\n├── components/     # Reusable components\n├── sections/       # Page sections\n├── pages/          # Pages and case studies\n├── data/           # Project data\n├── assets/         # Images and visual files\n├── styles/         # Global styles\n└── utils/          # Helper functions\n```',
+        roadmapContent: '- [x] Home page\n- [x] Projects section\n- [x] Contact form\n- [x] Responsiveness\n- [ ] Panel for editing projects\n- [ ] Integrated blog\n- [ ] Internationalization',
+        acknowledgementsContent: '- React community\n- Open source accessibility projects\n- Design and development references available in the community',
+        contactContent: '',
+        testsContent: '```bash\nnpm run test\n```'
+      }
+    },
+    'tpl-academic': {
+      name: 'Academic Project',
+      category: 'Academic',
+      description: 'Complete structure for theses, scientific articles, research, or academic projects.',
+      project: {
+        name: 'BioData — Urban Biodiversity Analysis',
+        description: 'Academic project for organizing, processing, and visualizing biodiversity data in urban areas.',
+        features: [
+          'CSV data import',
+          'Record cleaning and standardization',
+          'Identification of observed species',
+          'Diversity indicator calculation',
+          'Comparison between different regions',
+          'Data visualization in charts',
+          'Distribution map generation',
+          'Reproducible notebooks',
+          'Export of results to reports'
+        ],
+        prerequisitesContent: '- Python 3.11 or higher\n- Python virtual environment\n- Jupyter Notebook or JupyterLab\n- Data files in CSV format',
+        folderStructureContent: '```text\ndata/\n├── raw/             # Original data\n└── processed/       # Processed data\n\nnotebooks/\n├── exploration.ipynb\n└── biodiversity_analysis.ipynb\n\nsrc/\n├── cleaning/        # Data cleaning\n├── analysis/        # Analysis functions\n├── visualization/   # Charts and maps\n└── utils/           # Helper functions\n\ntests/               # Automated tests\nreports/             # Exported reports\n```',
+        roadmapContent: '- [x] Data import\n- [x] Cleaning and standardization\n- [x] Exploratory charts\n- [ ] Interactive maps\n- [ ] Comparison between periods\n- [ ] Public query web panel',
+        contributingContent: 'Contributions must preserve data traceability and explain any changes made to the analysis methods.',
+        authorsContent: '',
+        acknowledgementsContent: '- Open data scientific communities\n- Researchers and observers responsible for the records\n- Developers of the scientific libraries used',
+        contactContent: '',
+        testsContent: '```bash\npytest\n```'
+      }
+    }
+  },
+  'es-419': {
+    'tpl-web-app': {
+      name: 'Aplicación Web (SaaS)',
+      category: 'SaaS / Web',
+      description: 'Ideal para sistemas web modernos, paneles de control y plataformas SaaS integradas.',
+      project: {
+        name: 'FlowDesk Dashboard',
+        description: 'Dashboard SaaS para organizar proyectos, tareas, metas e indicadores de productividad de equipos pequeños en una interfaz centralizada, responsiva e intuitiva.',
+        features: [
+          'Dashboard con indicadores de productividad y rendimiento',
+          'Tablero Kanban para organización de tareas',
+          'CRUD completo de proyectos, tareas y responsables',
+          'Filtros por estado, prioridad, plazo y responsable',
+          'Gráficos interactivos para seguimiento de metas',
+          'Modo claro y oscuro',
+          'Layout responsivo para desktop, tablet y celular',
+          'Persistencia local de los datos del usuario'
+        ],
+        prerequisitesContent: '- Node.js 20 o superior\n- npm 10 o superior\n- Navegador moderno con soporte para JavaScript',
+        scriptsContent: '- `npm run dev`: inicia el servidor de desarrollo\n- `npm run build`: genera la versión optimizada para producción\n- `npm run preview`: ejecuta localmente el build de producción\n- `npm run lint`: verifica la calidad del código\n- `npm run test`: ejecuta las pruebas automatizadas',
+        folderStructureContent: '```text\nsrc/\n├── components/     # Componentes reutilizables\n├── pages/          # Pantallas principales de la aplicación\n├── store/          # Gestión de estado\n├── services/       # Servicios y persistencia de datos\n├── hooks/          # Hooks personalizados\n├── utils/          # Funciones auxiliares\n└── types/          # Tipados TypeScript\n```',
+        roadmapContent: '- [x] Dashboard con indicadores\n- [x] CRUD de proyectos y tareas\n- [x] Tablero Kanban\n- [x] Modo oscuro\n- [ ] Autenticación de usuarios\n- [ ] Colaboración en tiempo real\n- [ ] Exportación de informes en PDF',
+        contributingContent: 'Las contribuciones son bienvenidas. Crea una rama para tu cambio, realiza las pruebas necesarias y envía un Pull Request con una descripción clara de la mejora.',
+        authorsContent: '',
+        contactContent: '',
+        testsContent: 'Ejecuta las pruebas con:\n```bash\nnpm run test\n```'
+      }
+    },
+    'tpl-game': {
+      name: 'Juego (2D/3D)',
+      category: 'Juegos',
+      description: 'Diseño para juegos indie, web, móviles o de escritorio.',
+      project: {
+        name: 'Pixel Knight',
+        description: 'Juego de aventura y acción en pixel art donde el jugador explora ruinas antiguas, enfrenta criaturas, recolecta habilidades y desbloquea nuevas regiones del mapa.',
+        features: [
+          'Movimiento fluido con carrera, salto y esquiva',
+          'Sistema de combate cuerpo a cuerpo',
+          'Enemigos con diferentes patrones de comportamiento',
+          'Sistema de vida, daño e invencibilidad temporal',
+          'Checkpoints y progresión entre áreas',
+          'Objetos coleccionables y mejoras de habilidades',
+          'Soporte para teclado y gamepad',
+          'Banda sonora y efectos dinámicos'
+        ],
+        prerequisitesContent: '- Node.js 20 o superior\n- Navegador con soporte para HTML5 Canvas\n- Teclado o control compatible',
+        scriptsContent: '- `npm run dev`: inicia el juego en modo de desarrollo\n- `npm run build`: genera los archivos de producción\n- `npm run preview`: ejecuta el build localmente\n- `npm run test`: ejecuta las pruebas automatizadas',
+        folderStructureContent: '```text\nsrc/\n├── scenes/         # Escenas y fases del juego\n├── entities/       # Jugador, enemigos y objetos\n├── systems/        # Combate, colisión y progresión\n├── assets/         # Imágenes, sonidos y fuentes\n├── config/         # Configuraciones generales\n└── utils/          # Funciones auxiliares\n```',
+        roadmapContent: '- [x] Movimiento principal\n- [x] Sistema básico de combate\n- [x] Primera región jugable\n- [ ] Sistema completo de jefes\n- [ ] Nuevas habilidades desbloqueables\n- [ ] Soporte para guardado en la nube',
+        contributingContent: 'Abre una Issue antes de implementar cambios mayores. Para correcciones y mejoras menores, crea una rama y envía un Pull Request con las pruebas realizadas.',
+        acknowledgementsContent: '- Comunidad Phaser\n- Proyectos open source de juegos en HTML5\n- Artistas independientes de pixel art',
+        contactContent: '',
+        testsContent: '```bash\nnpm run test\n```'
+      }
+    },
+    'tpl-api': {
+      name: 'API REST / GraphQL',
+      category: 'Backend',
+      description: 'Enfocado en APIs backend, microservicios y documentación de endpoints.',
+      project: {
+        name: 'CommerceCore API',
+        description: 'API para gestionar productos, clientes, pedidos e inventario, desarrollada con arquitectura modular, autenticación segura y documentación interactiva.',
+        features: [
+          'Registro y autenticación de usuarios',
+          'Control de permisos por perfil',
+          'CRUD de productos, clientes y pedidos',
+          'Control de inventario',
+          'Paginación, filtros y ordenación',
+          'Validación de datos de entrada',
+          'Tratamiento centralizado de errores',
+          'Documentación interactiva con Swagger',
+          'Pruebas unitarias y de integración'
+        ],
+        prerequisitesContent: '- Node.js 20 o superior\n- PostgreSQL instalado o disponible en contenedor\n- Archivo `.env` configurado',
+        scriptsContent: '- `npm run dev`: inicia la API en desarrollo\n- `npm run build`: compila el proyecto\n- `npm run start`: ejecuta la versión de producción\n- `npm run test`: ejecuta las pruebas\n- `npm run prisma:migrate`: ejecuta las migraciones\n- `npm run prisma:studio`: abre el panel de Prisma',
+        folderStructureContent: '```text\nsrc/\n├── controllers/    # Controladores de rutas\n├── services/       # Reglas de negocio\n├── repositories/   # Acceso a datos\n├── routes/         # Definición de endpoints\n├── middlewares/    # Autenticación y validaciones\n├── schemas/        # Esquemas de validación\n├── config/         # Configuraciones de la aplicación\n└── tests/          # Pruebas automatizadas\n```',
+        roadmapContent: '- [x] CRUD de productos\n- [x] CRUD de clientes\n- [x] Control de pedidos\n- [x] Documentación Swagger\n- [ ] Integración con gateway de pago\n- [ ] Sistema de colas\n- [ ] Caché con Redis\n- [ ] Monitoreo y métricas',
+        contributingContent: 'Crea una rama a partir de `main`, sigue los patrones del proyecto y envía un Pull Request acompañado de las pruebas correspondientes.',
+        authorsContent: '',
+        contactContent: '',
+        testsContent: '```bash\nnpm run test\nnpm run test:coverage\n```'
+      }
+    },
+    'tpl-mobile': {
+      name: 'Aplicación Móvil',
+      category: 'Móvil',
+      description: 'Perfecto para aplicaciones Android, iOS o multiplataforma.',
+      project: {
+        name: 'FitPulse',
+        description: 'Aplicación móvil para seguimiento de hábitos saludables, hidratación, ejercicios, metas personales y evolución física, con funcionamiento offline.',
+        features: [
+          'Registro diario de hidratación',
+          'Creación de hábitos y metas personales',
+          'Seguimiento de ejercicios',
+          'Historial de actividades',
+          'Gráficos de evolución',
+          'Notificaciones locales personalizadas',
+          'Funcionamiento offline',
+          'Interfaz adaptada para Android e iOS',
+          'Modo claro y oscuro'
+        ],
+        prerequisitesContent: '- Flutter SDK instalado\n- Dart SDK compatible\n- Android Studio, Xcode o dispositivo físico\n- Emulador Android o simulador iOS configurado',
+        scriptsContent: '- `flutter run`: ejecuta la aplicación\n- `flutter test`: ejecuta las pruebas\n- `flutter analyze`: verifica problemas en el código\n- `flutter build apk`: genera la aplicación Android\n- `flutter build ios`: genera la versión para iOS',
+        folderStructureContent: '```text\nlib/\n├── screens/        # Pantallas de la aplicación\n├── widgets/        # Componentes reutilizables\n├── models/         # Modelos de datos\n├── services/       # Persistencia y notificaciones\n├── providers/      # Gestión de estado\n├── theme/          # Tema e identidad visual\n└── utils/          # Funciones auxiliares\n```',
+        roadmapContent: '- [x] Control de hidratación\n- [x] Registro de hábitos\n- [x] Notificaciones locales\n- [x] Gráficos de evolución\n- [ ] Sincronización entre dispositivos\n- [ ] Integración con Google Fit\n- [ ] Integración con Apple Health',
+        contributingContent: 'Antes de enviar cambios, ejecuta `flutter analyze` y `flutter test`. Explica claramente la mejora realizada en el Pull Request.',
+        contactContent: '',
+        testsContent: '```bash\nflutter test\n```'
+      }
+    },
+    'tpl-library': {
+      name: 'Biblioteca / Paquete NPM',
+      category: 'Utilidades / Paquetes',
+      description: 'Enfocado en paquetes reutilizables, utilidades, hooks, bibliotecas o plugins.',
+      project: {
+        name: 'date-utils-ptbr',
+        description: 'Biblioteca ligera en TypeScript para formatear, validar y manipular fechas en el estándar brasileño.',
+        features: [
+          'Formato de fechas en el estándar brasileño',
+          'Conversión entre texto y objetos Date',
+          'Validación de fechas',
+          'Cálculo de intervalos entre fechas',
+          'Identificación de años bisiestos',
+          'Soporte para feriados nacionales de Brasil',
+          'Compatibilidad con ESM y CommonJS',
+          'Tipados TypeScript incluidos',
+          'Soporte para tree shaking'
+        ],
+        scriptsContent: '- `npm run build`: genera las versiones ESM y CommonJS\n- `npm run test`: ejecuta las pruebas\n- `npm run lint`: verifica la calidad del código\n- `npm run typecheck`: ejecuta la verificación de TypeScript',
+        folderStructureContent: '```text\nsrc/\n├── formatters/     # Funciones de formato\n├── validators/     # Validaciones de fechas\n├── calculators/    # Cálculos e intervalos\n├── holidays/       # Reglas de feriados\n├── types/          # Tipados públicos\n└── index.ts        # Exportaciones de la biblioteca\n```',
+        roadmapContent: '- [x] Formato de fechas\n- [x] Validación de fechas\n- [x] Cálculo de intervalos\n- [ ] Feriados estatales\n- [ ] Localización para otros países\n- [ ] Plugin para frameworks front-end',
+        contributingContent: 'Las nuevas funciones deben incluir documentación, tipado completo y pruebas automatizadas.',
+        authorsContent: '',
+        contactContent: '',
+        testsContent: '```bash\nnpm run test\nnpm run typecheck\n```'
+      }
+    },
+    'tpl-portfolio': {
+      name: 'Sitio Web de Portafolio',
+      category: 'Personal',
+      description: 'Perfecto para desarrolladores que quieren presentar trabajos, contactos y proyectos.',
+      project: {
+        name: 'DevPortfolio',
+        description: 'Portafolio personal minimalista y responsivo para presentar proyectos, experiencias, habilidades y formas de contacto.',
+        features: [
+          'Página inicial con presentación profesional',
+          'Proyectos exhibidos como estudios de caso',
+          'Sección de habilidades y tecnologías',
+          'Línea de tiempo de experiencias',
+          'Formulario de contacto',
+          'Modo claro y oscuro',
+          'Animaciones suaves y accesibles',
+          'SEO básico y metadatos sociales',
+          'Layout responsivo',
+          'Navegación por teclado y soporte para lectores de pantalla'
+        ],
+        prerequisitesContent: '- Node.js 20 o superior\n- npm 10 o superior',
+        scriptsContent: '- `npm run dev`: inicia el entorno de desarrollo\n- `npm run build`: genera el portafolio para producción\n- `npm run preview`: visualiza el build localmente\n- `npm run lint`: verifica el código\n- `npm run test`: ejecuta las pruebas',
+        folderStructureContent: '```text\nsrc/\n├── components/     # Componentes reutilizables\n├── sections/       # Secciones de la página\n├── pages/          # Páginas y estudios de caso\n├── data/           # Datos de proyectos\n├── assets/         # Imágenes y archivos visuales\n├── styles/         # Estilos globales\n└── utils/          # Funciones auxiliares\n```',
+        roadmapContent: '- [x] Página inicial\n- [x] Sección de proyectos\n- [x] Formulario de contacto\n- [x] Responsividad\n- [ ] Panel para editar proyectos\n- [ ] Blog integrado\n- [ ] Internacionalización',
+        acknowledgementsContent: '- Comunidad React\n- Proyectos open source de accesibilidad\n- Referencias de diseño y desarrollo disponibles en la comunidad',
+        contactContent: '',
+        testsContent: '```bash\nnpm run test\n```'
+      }
+    },
+    'tpl-academic': {
+      name: 'Proyecto Académico',
+      category: 'Académico',
+      description: 'Estructura completa para tesis, artículos científicos, investigaciones o proyectos académicos.',
+      project: {
+        name: 'BioData — Análisis de Biodiversidad Urbana',
+        description: 'Proyecto académico para organizar, tratar y visualizar datos sobre biodiversidad en áreas urbanas.',
+        features: [
+          'Importación de datos en CSV',
+          'Limpieza y estandarización de registros',
+          'Identificación de especies observadas',
+          'Cálculo de indicadores de diversidad',
+          'Comparación entre diferentes regiones',
+          'Visualización de datos en gráficos',
+          'Generación de mapas de distribución',
+          'Notebooks reproducibles',
+          'Exportación de resultados a informes'
+        ],
+        prerequisitesContent: '- Python 3.11 o superior\n- Entorno virtual Python\n- Jupyter Notebook o JupyterLab\n- Archivos de datos en formato CSV',
+        folderStructureContent: '```text\ndata/\n├── raw/             # Datos originales\n└── processed/       # Datos tratados\n\nnotebooks/\n├── exploracion.ipynb\n└── analisis_biodiversidad.ipynb\n\nsrc/\n├── cleaning/        # Limpieza de datos\n├── analysis/        # Funciones de análisis\n├── visualization/   # Gráficos y mapas\n└── utils/           # Funciones auxiliares\n\ntests/               # Pruebas automatizadas\nreports/             # Informes exportados\n```',
+        roadmapContent: '- [x] Importación de datos\n- [x] Limpieza y estandarización\n- [x] Gráficos exploratorios\n- [ ] Mapas interactivos\n- [ ] Comparación entre períodos\n- [ ] Panel web para consulta pública',
+        contributingContent: 'Las contribuciones deben preservar la trazabilidad de los datos y explicar cualquier cambio realizado en los métodos de análisis.',
+        authorsContent: '',
+        acknowledgementsContent: '- Comunidades científicas de datos abiertos\n- Investigadores y observadores responsables de los registros\n- Desarrolladores de las bibliotecas científicas utilizadas',
+        contactContent: '',
+        testsContent: '```bash\npytest\n```'
+      }
+    }
+  }
+};
+
+function applyFictionalTemplateLocalization(template: ReadmeTemplate, locale: TemplateLocale): void {
+  const overrides = fictionalTemplateLocalizations[locale][template.id];
+  if (!overrides) {
+    return;
+  }
+
+  const { project, ...templateFields } = overrides;
+  Object.assign(template, templateFields);
+  template.project = {
+    ...template.project,
+    ...cloneTemplateData(project),
+  };
+}
+
 export function getLocalizedTemplates(locale: string): ReadmeTemplate[] {
   const isEn = locale.startsWith('en');
   const isEs = locale.startsWith('es');
+  const localizedTemplates = readmeTemplates.map(tpl => ({
+    ...tpl,
+    project: cloneTemplateData(tpl.project),
+  }));
 
   if (!isEn && !isEs) {
-    return readmeTemplates;
+    return localizedTemplates;
   }
 
-  // Clone templates to avoid modifying the original read-only arrays
-  return readmeTemplates.map(tpl => {
-    const clone = { ...tpl, project: { ...tpl.project } };
+  const localeKey: TemplateLocale = isEn ? 'en-US' : 'es-419';
 
-    if (isEn) {
-      if (clone.id === 'tpl-space-impacta') {
-        clone.name = 'Space Impacta Game';
-        clone.category = 'Games';
-        clone.description = 'Space action pixel art game developed with React, TypeScript, and HTML5 Canvas.';
-        clone.project.name = 'Space Impacta';
-        clone.project.description = 'Space action pixel art game developed with React, TypeScript, and HTML5 Canvas.';
-        clone.project.features = [
-          'Multiple playable ships',
-          'Challenging enemies',
-          'Power-ups and abilities',
-          'Score system'
-        ];
-        clone.project.prerequisitesContent = '- Node.js v18.0.0 or higher\n- Package manager npm or yarn\n- Modern browser compatible with HTML5 Canvas';
-        clone.project.scriptsContent = '- `npm run dev`: Starts the local development server\n- `npm run build`: Compiles the project for production\n- `npm run lint`: Runs static code analysis';
-        clone.project.roadmapContent = '- [x] Create basic physics and collision engine\n- [x] Implement 3 enemy types\n- [ ] Add gamepad support\n- [ ] Create global online leaderboard';
-        clone.project.contributingContent = 'Contributions are highly welcome! Feel free to open an Issue or create a Pull Request.\n\n1. Fork the project\n2. Create a branch for your feature (`git checkout -b feature/NewFeature`)\n3. Commit your changes (`git commit -m \'Add NewFeature\'`)\n4. Push the branch (`git push origin feature/NewFeature`)\n5. Open a Pull Request';
-        clone.project.acknowledgementsContent = '- Indie game developer community\n- Kenney.nl for the excellent free pixel art visual assets\n- Vite creators for the impressive bundler speed';
-        clone.project.contactContent = 'If you want to talk about the project, contact me via email at contact@youremail.com.';
-      } else if (clone.id === 'tpl-web-app') {
-        clone.name = 'Web Application (SaaS)';
-        clone.category = 'SaaS / Web';
-        clone.description = 'Ideal for modern web systems, dashboards, and integrated SaaS platforms.';
-        clone.project.name = 'TaskFlow Dashboard';
-        clone.project.description = 'Agile task and project management web platform supporting Kanban, productivity charts, and real-time collaboration.';
-        clone.project.features = [
-          'Drag-and-drop Kanban board',
-          'Dynamic productivity charts',
-          'Real-time notifications',
-          'Deadline and goal tracking'
-        ];
-        clone.project.prerequisitesContent = '- Node.js 18.x\n- Active Firebase account (optional, for real-time)\n- Local PostgreSQL database or Firebase Auth';
-        clone.project.scriptsContent = '- `npm run dev`: Runs the application in development mode\n- `npm run build`: Compiles the optimized production app\n- `npm run lint`: Analyzes code for formatting errors';
-        clone.project.roadmapContent = '- [x] Functional Kanban structure\n- [x] Local database integration\n- [ ] Google Calendar integration for deadlines\n- [ ] Automatic weekly PDF reports';
-        clone.project.contributingContent = 'Open a Pull Request describing your improvements or report issues by opening an Issue.';
-        clone.project.authorsContent = '- **John Smith** - *Lead Developer* - [@johnsmith](https://github.com/johnsmith)';
-        clone.project.contactContent = 'Developed by John Smith - john.smith@email.com';
-        clone.project.testsContent = 'Run the test suite with:\n```bash\nnpm run test\n```';
-      } else if (clone.id === 'tpl-game') {
-        clone.name = 'Game (2D/3D)';
-        clone.category = 'Games';
-        clone.description = 'Layout for indie, web, mobile, or desktop games.';
-        clone.project.name = 'Pixel Knight';
-        clone.project.description = '2D style metroidvania adventure and hack-and-slash pixel-art game developed with an HTML5 engine.';
-        clone.project.features = [
-          'Fluid frame-based movement',
-          'Positional audio for effects and music',
-          'Basic enemy artificial intelligence',
-          'Inventory system and weapon upgrades'
-        ];
-        clone.project.prerequisitesContent = '- Any modern browser with WebGL support\n- Node.js installed for local testing server';
-        clone.project.scriptsContent = '- `npm start`: Starts the Webpack Dev server and opens in the browser\n- `npm run build`: Generates the final production bundle in `/dist`';
-        clone.project.roadmapContent = '- [x] Physical implementation of double jump and dash\n- [ ] Creation of the Dark Forest map\n- [ ] Official launch on itch.io platform';
-        clone.project.contributingContent = 'If you wish to collaborate with art, audio, or code, please see our contribution guide.';
-        clone.project.acknowledgementsContent = '- Phaser community for excellent open source plugins\n- OpenGameArt artist who designed the medieval tilesets';
-        clone.project.contactContent = 'For partnerships and contact: dev@pixelknightgame.com';
-      } else if (clone.id === 'tpl-api') {
-        clone.name = 'REST / GraphQL API';
-        clone.category = 'Backend';
-        clone.description = 'Focused on backend APIs, microservices, and endpoint documentation.';
-        clone.project.name = 'E-Commerce Core API';
-        clone.project.description = 'High-performance API for shopping cart, inventory control, shipping calculation, and secure checkout.';
-        clone.project.features = [
-          'JWT Authentication with Refresh Tokens',
-          'Route and delivery calculation integrated with post systems',
-          'Stock concurrency guarantee using Redis queues',
-          'Complete interactive OpenAPI/Swagger documentation'
-        ];
-        clone.project.prerequisitesContent = '- Docker installed on the machine\n- Node.js v18.x\n- Sandbox keys for payment gateway';
-        clone.project.scriptsContent = '- `npm run dev`: Runs the API with ts-node-dev and change monitoring\n- `npm run migrate`: Runs Prisma database migrations\n- `npm test`: Runs unit and integration tests with Jest';
-        clone.project.contributingContent = 'Open issues detailing bugs or submit improvement PRs. Follow commit conventions described in Conventional Commits.';
-        clone.project.authorsContent = '- **Jane Doe** - *Tech Lead Backend* - [@janedoe](https://github.com/janedoe)';
-        clone.project.contactContent = 'Support email: api-support@ecommercecore.com';
-        clone.project.testsContent = 'Full test suite via:\n```bash\nnpm run test\nnpm run test:coverage\n```';
-      } else if (clone.id === 'tpl-mobile') {
-        clone.name = 'Mobile App';
-        clone.category = 'Mobile';
-        clone.description = 'Perfect for Android, iOS, or cross-platform apps (React Native, Flutter).';
-        clone.project.name = 'FitPulse App';
-        clone.project.description = 'Mobile application for physical monitoring, workout scheduling, BMI calculation, and daily hydration tracking with reminders.';
-        clone.project.features = [
-          'Daily reminders via local push notifications',
-          'Interactive water consumption tracker',
-          'Weight and exercise progress charts',
-          '100% offline operation'
-        ];
-        clone.project.prerequisitesContent = '- Expo Go app installed on Android/iOS smartphone\n- Or configured Android Studio emulator / Xcode simulator';
-        clone.project.scriptsContent = '- `npx expo start`: Opens the Metro Bundler panel\n- `npm run android`: Runs the app directly on the connected Android emulator\n- `npm run ios`: Runs the app directly on the local iOS emulator';
-        clone.project.roadmapContent = '- [x] User login and profile\n- [x] Stopwatch and hydration reminders\n- [ ] Automatic sync with Apple Health and Google Fit\n- [ ] Achievement sharing on social media';
-        clone.project.contributingContent = 'Forks are welcome. Ensure the code passes Expo ESLint before submitting.';
-        clone.project.contactContent = 'Questions or feedback: mobile-support@fitpulse.app';
-      } else if (clone.id === 'tpl-library') {
-        clone.name = 'Library / NPM Package';
-        clone.category = 'Utilities / Packages';
-        clone.description = 'Focused on reusable packages, utilities, hooks, libraries, or plugins.';
-        clone.project.name = 'date-utils-ptbr';
-        clone.project.description = 'Ultra lightweight TypeScript library for formatting, validating, and manipulating dates in Brazilian format, including support for national holidays and leap years.';
-        clone.project.features = [
-          'Extremely small size (< 2KB gzip)',
-          'Support for all Brazilian moving holidays (Easter, Carnival, etc.)',
-          'Intuitive formatting in Brazilian Portuguese',
-          'Compatible with ESModules and CommonJS'
-        ];
-        clone.project.scriptsContent = '- `npm run build`: Compiles the library for ESM and CJS using esbuild\n- `npm run test`: Runs formatting tests with Vitest\n- `npm run benchmark`: Compares performance with other popular libraries';
-        clone.project.contributingContent = 'Report bugs by opening Issues or create a PR with new useful methods and utilities.';
-        clone.project.authorsContent = '- **Carla Mendes** - *Library Creator* - [@carlamendes](https://github.com/carlamendes)';
-        clone.project.contactContent = 'Send suggestions to carla.mendes@email.com';
-        clone.project.testsContent = 'The library features 100% code coverage. Test locally by running:\n```bash\nnpm run test\n```';
-      } else if (clone.id === 'tpl-portfolio') {
-        clone.name = 'Portfolio Website';
-        clone.category = 'Personal';
-        clone.description = 'Perfect for developers to display their work, contact info, and projects.';
-        clone.project.name = 'DevPortfolio';
-        clone.project.description = 'Elegant, minimalist, and high-speed portfolio to display development projects, professional experience, and contact links.';
-        clone.project.features = [
-          'Direct and validated contact form via EmailJS',
-          'Smooth and fluid scroll animations',
-          'Bento Grid of highlighted projects',
-          'Full accessibility support (screen readers)'
-        ];
-        clone.project.scriptsContent = '- `npm run dev`: Runs in fast local development\n- `npm run build`: Generates optimized static files for hosting (Vercel, Netlify, Github Pages)';
-        clone.project.acknowledgementsContent = '- Design inspiration taken from Dribbble and Behance\n- Fonts provided by Google Fonts';
-        clone.project.contactContent = 'Available for freelance and new opportunities! Connect with me on LinkedIn or send a message through the form.';
-      } else if (clone.id === 'tpl-academic') {
-        clone.name = 'Academic Project';
-        clone.category = 'Academic';
-        clone.description = 'Complete structure for theses, scientific articles, research, or Capstone projects.';
-        clone.project.name = 'SmartData Epidemiological Analysis';
-        clone.project.description = 'Research and development project focused on computational modeling of pathogen spread in dense urban environments.';
-        clone.project.features = [
-          'SEIR computational simulation models',
-          'Statistical processing of real demographic data',
-          'Interactive graphical visualization of contagion curves',
-          'Automatic export of formatted academic reports'
-        ];
-        clone.project.prerequisitesContent = '- Python 3.10 or higher\n- Configured virtual environment (venv)\n- Local LaTeX compiler installation (for report generation)';
-        clone.project.folderStructureContent = '```text\ndata/\n  ├── raw/            # Anonymized raw data\n  └── processed/      # Cleaned data for modeling\nnotebooks/            # Experiments and analysis drafts\nsrc/\n  ├── model/          # Implementation of differential equations\n  └── visualization/  # Plotting and mapping scripts\n```';
-        clone.project.authorsContent = '- **Dr. Helena Souza** - *Lead Researcher* - [Lattes](http://lattes.cnpq.br/0000)\n- **Dr. Arthur Lima** - *Co-advisor* - [Lattes](http://lattes.cnpq.br/1111)';
-        clone.project.acknowledgementsContent = '- To CNPq for financial support and research fellowships granted\n- To the Department of Scientific Computing of the Federal University';
-        clone.project.contactContent = 'Contact for academic questions: helena.souza@universidade.edu';
-      }
-    } else if (isEs) {
-      if (clone.id === 'tpl-space-impacta') {
-        clone.name = 'Juego Space Impacta';
-        clone.category = 'Juegos';
-        clone.description = 'Juego de acción espacial en pixel art desarrollado con React, TypeScript y HTML5 Canvas.';
-        clone.project.name = 'Space Impacta';
-        clone.project.description = 'Juego de acción espacial en pixel art desarrollado con React, TypeScript y HTML5 Canvas.';
-        clone.project.features = [
-          'Múltiples naves jugables',
-          'Enemigos desafiantes',
-          'Power-ups y habilidades',
-          'Sistema de puntuación'
-        ];
-        clone.project.prerequisitesContent = '- Node.js v18.0.0 o superior\n- Gestor de paquetes npm o yarn\n- Navegador moderno compatible con HTML5 Canvas';
-        clone.project.scriptsContent = '- `npm run dev`: Inicia el servidor de desarrollo local\n- `npm run build`: Compila el proyecto para producción\n- `npm run lint`: Ejecuta el análisis estático del código';
-        clone.project.roadmapContent = '- [x] Crear motor de física y colisiones básico\n- [x] Implementar 3 tipos de enemigos\n- [ ] Añadir soporte para mandos (Gamepad)\n- [ ] Crear tabla de clasificación global online';
-        clone.project.contributingContent = '¡Las contribuciones son muy bienvenidas! Siéntete libre de abrir un problema (Issue) o crear una solicitud de extracción (Pull Request).\n\n1. Haz un Fork del proyecto\n2. Crea una rama para tu característica (`git checkout -b feature/NuevaCaracteristica`)\n3. Confirma tus cambios (`git commit -m \'Add NuevaCaracteristica\'`)\n4. Envía la rama (`git push origin feature/NuevaCaracteristica`)\n5. Abre un Pull Request';
-        clone.project.acknowledgementsContent = '- Comunidad de desarrolladores de videojuegos indie\n- Kenney.nl por los excelentes recursos visuales gratuitos en pixel art\n- Creadores de Vite por la velocidad impresionante del empaquetador';
-        clone.project.contactContent = 'Si deseas conversar sobre el proyecto, ponte en contacto a través del correo electrónico contacto@tuemail.com.';
-      } else if (clone.id === 'tpl-web-app') {
-        clone.name = 'Aplicación Web (SaaS)';
-        clone.category = 'SaaS / Web';
-        clone.description = 'Ideal para sistemas web modernos, paneles de control y plataformas SaaS integradas.';
-        clone.project.name = 'TaskFlow Dashboard';
-        clone.project.description = 'Plataforma web de gestión ágil de tareas y proyectos con soporte para Kanban, gráficos de productividad y colaboración en tiempo real.';
-        clone.project.features = [
-          'Tablero Kanban de arrastrar y soltar',
-          'Gráficos de productividad dinámicos',
-          'Notificaciones en tiempo real',
-          'Seguimiento de plazos y metas'
-        ];
-        clone.project.prerequisitesContent = '- Node.js 18.x\n- Cuenta activa en Firebase (opcional, para tiempo real)\n- Base de datos local PostgreSQL o Firebase Auth';
-        clone.project.scriptsContent = '- `npm run dev`: Ejecuta la aplicación en modo de desarrollo\n- `npm run build`: Compila la aplicación optimizada para producción\n- `npm run lint`: Analiza el código en busca de errores de formato';
-        clone.project.folderStructureContent = '```text\nsrc/\n  ├── components/     # Componentes compartidos\n  ├── context/        # Estados globales (Auth, Theme)\n  ├── hooks/          # Ganchos personalizados (Hooks)\n  ├── services/       # Integración con APIs externas\n  └── types/          # Definición de tipos TS\n```';
-        clone.project.roadmapContent = '- [x] Estructura Kanban funcional\n- [x] Integración con base de datos local\n- [ ] Integración con Google Calendar para plazos\n- [ ] Informes en PDF semanales automáticos';
-        clone.project.contributingContent = 'Abre un Pull Request describiendo tus mejoras o informa de problemas abriendo un problema (Issue).';
-        clone.project.authorsContent = '- **Juan Pérez** - *Desarrollador Principal* - [@juanperez](https://github.com/juanperez)';
-        clone.project.contactContent = 'Desarrollado por Juan Pérez - juan.perez@email.com';
-        clone.project.testsContent = 'Ejecuta las pruebas con:\n```bash\nnpm run test\n```';
-      } else if (clone.id === 'tpl-game') {
-        clone.name = 'Juego (2D/3D)';
-        clone.category = 'Juegos';
-        clone.description = 'Diseño para videojuegos indie, web, móviles o de escritorio.';
-        clone.project.name = 'Pixel Knight';
-        clone.project.description = 'Juego estilo metroidvania 2D de aventura y combate hack-and-slash en pixel-art desarrollado con motor HTML5.';
-        clone.project.features = [
-          'Movimiento fluido basado en fotogramas',
-          'Audio posicional para efectos y música',
-          'Inteligencia artificial básica para enemigos',
-          'Sistema de inventario y mejoras de armas'
-        ];
-        clone.project.prerequisitesContent = '- Cualquier navegador moderno con soporte WebGL\n- Node.js instalado para el servidor de pruebas local';
-        clone.project.scriptsContent = '- `npm start`: Inicia el servidor de desarrollo y lo abre en el navegador\n- `npm run build`: Genera el paquete de producción final en `/dist`';
-        clone.project.roadmapContent = '- [x] Implementación física de doble salto y esquiva\n- [ ] Creación del mapa del Bosque Sombrío\n- [ ] Lanzamiento oficial en la plataforma itch.io';
-        clone.project.contributingContent = 'Si deseas colaborar con arte, audio o código, consulta nuestra guía de contribución.';
-        clone.project.acknowledgementsContent = '- Comunidad de Phaser por los excelentes complementos de código abierto\n- Artista de OpenGameArt que diseñó los conjuntos de mapas medievales';
-        clone.project.contactContent = 'Para asociaciones y contacto: dev@pixelknightgame.com';
-      } else if (clone.id === 'tpl-api') {
-        clone.name = 'API REST / GraphQL';
-        clone.category = 'Backend';
-        clone.description = 'Enfocado en APIs de backend, microservicios y documentación de endpoints.';
-        clone.project.name = 'E-Commerce Core API';
-        clone.project.description = 'API de alto rendimiento para control de carritos, inventario, cálculo de envío y pago seguro.';
-        clone.project.features = [
-          'Autenticación JWT con Tokens de Refresco',
-          'Cálculo de rutas y entrega integrado con el sistema postal',
-          'Garantía de concurrencia de stock mediante colas Redis',
-          'Documentación OpenAPI/Swagger interactiva completa'
-        ];
-        clone.project.prerequisitesContent = '- Docker instalado en la máquina\n- Node.js v18.x\n- Claves de sandbox para pasarela de pago';
-        clone.project.scriptsContent = '- `npm run dev`: Ejecuta la API con ts-node-dev y monitoreo de cambios\n- `npm run migrate`: Ejecuta las migraciones de la base de datos Prisma\n- `npm test`: Ejecuta pruebas unitarias y de integración con Jest';
-        clone.project.contributingContent = 'Abre problemas detallando errores o envía solicitudes de mejora. Sigue las convenciones de commit en Conventional Commits.';
-        clone.project.authorsContent = '- **Ana Clara** - *Tech Lead Backend* - [@anaclara](https://github.com/anaclara)';
-        clone.project.contactContent = 'Correo de soporte: api-support@ecommercecore.com';
-        clone.project.testsContent = 'Suite completa de pruebas mediante:\n```bash\nnpm run test\nnpm run test:coverage\n```';
-      } else if (clone.id === 'tpl-mobile') {
-        clone.name = 'Aplicación Móvil';
-        clone.category = 'Móvil';
-        clone.description = 'Perfecto para aplicaciones Android, iOS o multiplataforma (React Native, Flutter).';
-        clone.project.name = 'FitPulse App';
-        clone.project.description = 'Aplicación móvil para monitoreo físico, programación de entrenamientos, cálculo de IMC y seguimiento de hidratación diaria con recordatorios.';
-        clone.project.features = [
-          'Recordatorios diarios por notificaciones push locales',
-          'Rastreador interactivo de consumo de agua',
-          'Gráficos de progreso de peso y ejercicios',
-          'Funcionamiento 100% sin conexión (offline)'
-        ];
-        clone.project.prerequisitesContent = '- Aplicación Expo Go instalada en smartphone Android/iOS\n- O emulador Android Studio / simulador Xcode configurado';
-        clone.project.scriptsContent = '- `npx expo start`: Abre el panel de Metro Bundler\n- `npm run android`: Ejecuta la app directamente en el emulador Android conectado\n- `npm run ios`: Ejecuta la app directamente en el emulador iOS local';
-        clone.project.roadmapContent = '- [x] Inicio de sesión y perfil de usuario\n- [x] Cronómetro y recordatorios de hidratación\n- [ ] Sincronización automática con Apple Health y Google Fit\n- [ ] Compartir logros en redes sociales';
-        clone.project.contributingContent = 'Las solicitudes de extracción son bienvenidas. Asegúrese de que el código pase el ESLint de Expo antes de enviarlo.';
-        clone.project.contactContent = 'Preguntas o comentarios: mobile-support@fitpulse.app';
-      } else if (clone.id === 'tpl-library') {
-        clone.name = 'Biblioteca / Paquete NPM';
-        clone.category = 'Utilidades / Paquetes';
-        clone.description = 'Enfocado en paquetes reutilizables, utilitários, ganchos (hooks), bibliotecas o complementos.';
-        clone.project.name = 'date-utils-ptbr';
-        clone.project.description = 'Biblioteca ultra ligera en TypeScript para formatear, validar y manipular fechas en formato brasileño, con soporte para días festivos nacionales y años bisiestos.';
-        clone.project.features = [
-          'Tamaño extremadamente reducido (< 2KB gzip)',
-          'Soporte para todos los días festivos móviles brasileños (Pascua, Carnaval, etc.)',
-          'Formateo intuitivo en portugués brasileño',
-          'Compatible con ESModules y CommonJS'
-        ];
-        clone.project.scriptsContent = '- `npm run build`: Compila la biblioteca para ESM y CJS usando esbuild\n- `npm run test`: Ejecuta las pruebas de formateo con Vitest\n- `npm run benchmark`: Compara el rendimiento con otras bibliotecas populares';
-        clone.project.contributingContent = 'Informa de errores abriendo problemas o crea un PR con nuevos métodos útiles.';
-        clone.project.authorsContent = '- **Carla Mendes** - *Creadora de la biblioteca* - [@carlamendes](https://github.com/carlamendes)';
-        clone.project.contactContent = 'Envía sugerencias a carla.mendes@email.com';
-        clone.project.testsContent = 'La biblioteca cuenta con 100% de cobertura de código. Prueba localmente ejecutando:\n```bash\nnpm run test\n```';
-      } else if (clone.id === 'tpl-portfolio') {
-        clone.name = 'Sitio Web de Portafolio';
-        clone.category = 'Personal';
-        clone.description = 'Perfecto para que los desarrolladores muestren sus trabajos, contactos y proyectos.';
-        clone.project.name = 'DevPortfolio';
-        clone.project.description = 'Portafolio elegante, minimalista y de alta velocidad para exhibir proyectos de desarrollo, experiencia profesional y enlaces de contacto.';
-        clone.project.features = [
-          'Formulario de contacto directo y validado mediante EmailJS',
-          'Animaciones de desplazamiento suaves y fluidas',
-          'Bento Grid de proyectos destacados',
-          'Soporte completo de accesibilidad (lectores de pantalla)'
-        ];
-        clone.project.scriptsContent = '- `npm run dev`: Se ejecuta en desarrollo local rápido\n- `npm run build`: Genera los archivos estáticos optimizados para alojamiento (Vercel, Netlify, Github Pages)';
-        clone.project.acknowledgementsContent = '- Inspiraciones de diseño tomadas de Dribbble y Behance\n- Fuentes provistas por Google Fonts';
-        clone.project.contactContent = '¡Disponible para freelance y nuevas oportunidades! Conéctate conmigo en LinkedIn o envía un mensaje por el formulario.';
-      } else if (clone.id === 'tpl-academic') {
-        clone.name = 'Proyecto Académico';
-        clone.category = 'Académico';
-        clone.description = 'Estructura completa para tesis, artículos científicos, investigaciones o proyectos de fin de carrera.';
-        clone.project.name = 'Análisis Epidemiológico SmartData';
-        clone.project.description = 'Proyecto de investigación y desarrollo centrado en el modelado computacional de la propagación de patógenos en entornos urbanos densos.';
-        clone.project.features = [
-          'Modelos de simulación computacional SEIR',
-          'Procesamiento estadístico de datos demográficos reales',
-          'Visualización gráfica interactiva de curvas de contagio',
-          'Exportación automática de informes académicos formateados'
-        ];
-        clone.project.prerequisitesContent = '- Python 3.10 o superior\n- Entorno virtual (venv) configurado\n- Instalación local de compilador LaTeX (para generación de informes)';
-        clone.project.folderStructureContent = '```text\ndata/\n  ├── raw/            # Datos brutos anonimizados\n  └── processed/      # Datos limpios para modelado\nnotebooks/            # Experimentos y borradores de análisis\nsrc/\n  ├── model/          # Implementación de ecuaciones diferenciales\n  └── visualization/  # Scripts de trazado y mapas\n```';
-        clone.project.authorsContent = '- **Dra. Helena Souza** - *Investigadora Principal* - [Lattes](http://lattes.cnpq.br/0000)\n- **Dr. Arthur Lima** - *Co-asesor* - [Lattes](http://lattes.cnpq.br/1111)';
-        clone.project.acknowledgementsContent = '- Al CNPq por el apoyo financiero y las becas de investigación concedidas\n- Al Departamento de Computación Científica de la Universidad Federal';
-        clone.project.contactContent = 'Contacto para dudas académicas: helena.souza@universidade.edu';
-      }
+  return localizedTemplates.map(clone => {
+    if (isEn && clone.id === 'tpl-space-impacta') {
+      clone.name = 'Space Impacta Game';
+      clone.category = 'Games';
+      clone.description = 'Space action pixel art game developed with React, TypeScript, and HTML5 Canvas.';
+      clone.project.name = 'Space Impacta';
+      clone.project.description = 'Space action pixel art game developed with React, TypeScript, and HTML5 Canvas.';
+      clone.project.features = [
+        'Multiple playable ships',
+        'Challenging enemies',
+        'Power-ups and abilities',
+        'Score system'
+      ];
+      clone.project.prerequisitesContent = '- Node.js v18.0.0 or higher\n- Package manager npm or yarn\n- Modern browser compatible with HTML5 Canvas';
+      clone.project.scriptsContent = '- `npm run dev`: Starts the local development server\n- `npm run build`: Compiles the project for production\n- `npm run lint`: Runs static code analysis';
+      clone.project.roadmapContent = '- [x] Create basic physics and collision engine\n- [x] Implement 3 enemy types\n- [ ] Add gamepad support\n- [ ] Create global online leaderboard';
+      clone.project.contributingContent = 'Contributions are highly welcome! Feel free to open an Issue or create a Pull Request.\n\n1. Fork the project\n2. Create a branch for your feature (`git checkout -b feature/NewFeature`)\n3. Commit your changes (`git commit -m \'Add NewFeature\'`)\n4. Push the branch (`git push origin feature/NewFeature`)\n5. Open a Pull Request';
+      clone.project.acknowledgementsContent = '- Indie game developer community\n- Kenney.nl for the excellent free pixel art visual assets\n- Vite creators for the impressive bundler speed';
+      clone.project.contactContent = '';
     }
+
+    if (isEs && clone.id === 'tpl-space-impacta') {
+      clone.name = 'Juego Space Impacta';
+      clone.category = 'Juegos';
+      clone.description = 'Juego de acción espacial en pixel art desarrollado con React, TypeScript y HTML5 Canvas.';
+      clone.project.name = 'Space Impacta';
+      clone.project.description = 'Juego de acción espacial en pixel art desarrollado con React, TypeScript y HTML5 Canvas.';
+      clone.project.features = [
+        'Múltiples naves jugables',
+        'Enemigos desafiantes',
+        'Power-ups y habilidades',
+        'Sistema de puntuación'
+      ];
+      clone.project.prerequisitesContent = '- Node.js v18.0.0 o superior\n- Gestor de paquetes npm o yarn\n- Navegador moderno compatible con HTML5 Canvas';
+      clone.project.scriptsContent = '- `npm run dev`: Inicia el servidor de desarrollo local\n- `npm run build`: Compila el proyecto para producción\n- `npm run lint`: Ejecuta el análisis estático del código';
+      clone.project.roadmapContent = '- [x] Crear motor de física y colisiones básico\n- [x] Implementar 3 tipos de enemigos\n- [ ] Añadir soporte para mandos (Gamepad)\n- [ ] Crear tabla de clasificación global online';
+      clone.project.contributingContent = 'Las contribuciones son muy bienvenidas. Puedes abrir una Issue o crear un Pull Request.\n\n1. Haz un Fork del proyecto\n2. Crea una rama para tu característica (`git checkout -b feature/NuevaCaracteristica`)\n3. Confirma tus cambios (`git commit -m \'Add NuevaCaracteristica\'`)\n4. Envía la rama (`git push origin feature/NuevaCaracteristica`)\n5. Abre un Pull Request';
+      clone.project.acknowledgementsContent = '- Comunidad de desarrolladores de videojuegos indie\n- Kenney.nl por los excelentes recursos visuales gratuitos en pixel art\n- Creadores de Vite por la velocidad impresionante del empaquetador';
+      clone.project.contactContent = '';
+    }
+
+    applyFictionalTemplateLocalization(clone, localeKey);
 
     return clone;
   });

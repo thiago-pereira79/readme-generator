@@ -169,6 +169,21 @@ export function createSlug(text: string): string {
     .replace(/\-\-+/g, '-'); // Replace multiple - with single -
 }
 
+export function formatCodeContent(content: string, defaultLanguage = 'bash'): string {
+  const trimmed = content.trim();
+
+  if (!trimmed) {
+    return '';
+  }
+
+  const isAlreadyFenced = trimmed.startsWith('```') && trimmed.endsWith('```');
+  if (isAlreadyFenced) {
+    return trimmed;
+  }
+
+  return `\`\`\`${defaultLanguage}\n${trimmed}\n\`\`\``;
+}
+
 /**
  * Generates a full markdown string based on a ReadmeProject model
  */
@@ -246,12 +261,12 @@ export function generateReadmeMarkdown(project: ReadmeProject, showBadges = true
 
   // Installation
   if (project.installation) {
-    md += `## ${t('readme.installation')}\n\n\`\`\`bash\n${project.installation}\n\`\`\`\n\n`;
+    md += `## ${t('readme.installation')}\n\n${formatCodeContent(project.installation, 'bash')}\n\n`;
   }
 
   // Usage
   if (project.usage) {
-    md += `## ${t('readme.usage')}\n\n\`\`\`bash\n${project.usage}\n\`\`\`\n\n`;
+    md += `## ${t('readme.usage')}\n\n${formatCodeContent(project.usage, 'bash')}\n\n`;
   }
 
   // Scripts (Optional)

@@ -35,7 +35,7 @@ import { initialProject, ReadmeTemplate } from './data/templatesData';
 import { 
   validateProject, 
   savePreviewSnapshot, 
-  readPreviewSnapshot, 
+  readPreviewSnapshotForProject, 
   PREVIEW_CHANNEL_NAME, 
   ReadmePreviewSnapshot 
 } from './utils/previewBridge';
@@ -44,6 +44,41 @@ import { generateReadmeMarkdown } from './utils/readmeUtils';
 const PreviewPage = React.lazy(() =>
   import('./components/PreviewPage').then(module => ({ default: module.PreviewPage }))
 );
+
+function createClientProjectId(): string {
+  return typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : Math.random().toString(36).slice(2, 11);
+}
+
+function cloneProjectForPreview(project: ReadmeProject): ReadmeProject {
+  return typeof structuredClone !== 'undefined'
+    ? structuredClone(project)
+    : JSON.parse(JSON.stringify(project));
+}
+
+function getPreviewWindowName(projectId: string): string {
+  const safeProjectId = projectId.replace(/[^a-zA-Z0-9_-]/g, '-');
+  return `readme-preview-${safeProjectId}`;
+}
+
+function createPreviewSnapshot(
+  project: ReadmeProject,
+  showBadges: boolean,
+  locale: AppLocale
+): ReadmePreviewSnapshot {
+  const markdown = generateReadmeMarkdown(project, showBadges, locale);
+
+  return {
+    schemaVersion: 1,
+    generatedAt: new Date().toISOString(),
+    projectId: project.id,
+    projectName: project.name,
+    locale,
+    project: cloneProjectForPreview(project),
+    markdown,
+  };
+}
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -165,29 +200,19 @@ export default function App() {
   }, [currentTab, isPreviewRoute]);
 
   // --- PREVIEW WINDOW AND SNAPSHOT REFS ---
-  const previewWindowRef = useRef<Window | null>(null);
-  const latestPreviewSnapshotRef = useRef<ReadmePreviewSnapshot | null>(null);
+  const previewWindowsRef = useRef<Map<string, Window>>(new Map());
+  const previewSnapshotsRef = useRef<Map<string, ReadmePreviewSnapshot>>(new Map());
 
-  // Always keep latestPreviewSnapshotRef.current up-to-date with activeProject
+  // Always keep the active project's preview snapshot up to date.
   useEffect(() => {
     const validation = validateProject(activeProject);
     if (validation.valid) {
-      const markdown = generateReadmeMarkdown(
+      const snapshot = createPreviewSnapshot(
         activeProject,
         preferences.showTechnologyBadges,
         i18n.language as AppLocale
       );
-      latestPreviewSnapshotRef.current = {
-        schemaVersion: 1,
-        generatedAt: new Date().toISOString(),
-        projectId: activeProject.id,
-        projectName: activeProject.name,
-        locale: i18n.language as AppLocale,
-        project: typeof structuredClone !== 'undefined' ? structuredClone(activeProject) : JSON.parse(JSON.stringify(activeProject)),
-        markdown,
-      };
-    } else {
-      latestPreviewSnapshotRef.current = null;
+      previewSnapshotsRef.current.set(snapshot.projectId, snapshot);
     }
   }, [activeProject, preferences.showTechnologyBadges, i18n.language]);
 
@@ -220,34 +245,43 @@ export default function App() {
     };
   }, []);
 
-  // Handle direct postMessage messages (e.g. PREVIEW_READY) from the opened preview tab
+  // Handle direct postMessage messages (e.g. PREVIEW_READY) from opened preview tabs.
   useEffect(() => {
     const handlePreviewMessage = (event: MessageEvent) => {
-      // Security check: only accept messages from our own origin
       if (event.origin !== window.location.origin) {
         return;
       }
 
-      if (previewWindowRef.current && event.source !== previewWindowRef.current) {
-        return;
-      }
-
-      // Check if it's the preview ready signal
       if (event.data?.type === 'PREVIEW_READY') {
-        // Target only our opened preview window reference if possible, otherwise use event.source as safe fallback
-        const targetWindow = (previewWindowRef.current || event.source) as Window;
-        const snapshot = latestPreviewSnapshotRef.current;
+        const projectId = typeof event.data.projectId === 'string' ? event.data.projectId : '';
+        if (!projectId) {
+          return;
+        }
 
-        if (snapshot) {
+        const registeredWindow = previewWindowsRef.current.get(projectId);
+        if (registeredWindow && !registeredWindow.closed && event.source && event.source !== registeredWindow) {
+          return;
+        }
+
+        const snapshot =
+          previewSnapshotsRef.current.get(projectId) ??
+          readPreviewSnapshotForProject(projectId);
+
+        const targetWindow = (registeredWindow && !registeredWindow.closed
+          ? registeredWindow
+          : event.source) as Window | null;
+
+        if (snapshot && targetWindow) {
           targetWindow.postMessage(
             {
               type: 'PREVIEW_SNAPSHOT',
+              projectId,
               payload: snapshot,
             },
             window.location.origin
           );
         } else {
-          console.warn('[README Preview] PREVIEW_READY received but no latest snapshot is set in ref.');
+          console.warn('[README Preview] PREVIEW_READY received but no snapshot was found for project:', projectId);
         }
       }
     };
@@ -258,15 +292,24 @@ export default function App() {
     };
   }, []);
 
-  // BroadcastChannel handshake fallback: listen for PREVIEW_READY and reply with PREVIEW_SNAPSHOT
+  // BroadcastChannel handshake fallback: listen for PREVIEW_READY and reply with the matching project snapshot.
   useEffect(() => {
     const channel = new BroadcastChannel(PREVIEW_CHANNEL_NAME);
     const handleMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === 'PREVIEW_READY') {
-        const snapshot = latestPreviewSnapshotRef.current;
+        const projectId = typeof event.data.projectId === 'string' ? event.data.projectId : '';
+        if (!projectId) {
+          return;
+        }
+
+        const snapshot =
+          previewSnapshotsRef.current.get(projectId) ??
+          readPreviewSnapshotForProject(projectId);
+
         if (snapshot) {
           channel.postMessage({
             type: 'PREVIEW_SNAPSHOT',
+            projectId,
             payload: snapshot,
           });
         }
@@ -279,18 +322,27 @@ export default function App() {
     };
   }, []);
 
-  // Live sync of editor changes to the preview tab (debounced 400ms) using postMessage & fallback methods
+  // Live sync editor changes only to the active project's preview tab.
   useEffect(() => {
     const timer = setTimeout(() => {
-      const snapshot = latestPreviewSnapshotRef.current;
-      if (!snapshot) return;
+      const validation = validateProject(activeProject);
+      if (!validation.valid) return;
 
-      // 1. Send via direct postMessage if preview window reference is alive and open
-      if (previewWindowRef.current && !previewWindowRef.current.closed) {
+      const snapshot = createPreviewSnapshot(
+        activeProject,
+        preferences.showTechnologyBadges,
+        i18n.language as AppLocale
+      );
+      previewSnapshotsRef.current.set(snapshot.projectId, snapshot);
+
+      const previewWindow = previewWindowsRef.current.get(snapshot.projectId);
+
+      if (previewWindow && !previewWindow.closed) {
         try {
-          previewWindowRef.current.postMessage(
+          previewWindow.postMessage(
             {
               type: 'PREVIEW_SNAPSHOT',
+              projectId: snapshot.projectId,
               payload: snapshot,
             },
             window.location.origin
@@ -298,21 +350,22 @@ export default function App() {
         } catch (e) {
           console.warn('[README Preview] Error real-time syncing via postMessage:', e);
         }
+      } else if (previewWindow?.closed) {
+        previewWindowsRef.current.delete(snapshot.projectId);
       }
 
-      // 2. LocalStorage persistence (partitioned/fallback)
       savePreviewSnapshot(snapshot);
 
-      // 3. BroadcastChannel (fallback)
       try {
         const channel = new BroadcastChannel(PREVIEW_CHANNEL_NAME);
         channel.postMessage({
           type: 'PREVIEW_SNAPSHOT',
+          projectId: snapshot.projectId,
           payload: snapshot,
         });
         channel.close();
       } catch (e) {
-        // Safe to ignore in highly partitioned iframe environments
+        // Safe to ignore in highly partitioned environments.
       }
     }, 400);
 
@@ -422,38 +475,43 @@ export default function App() {
   // "Gerar README" final action
   const handleGenerateReadme = () => {
     // 1. Validate current project before opening a new tab.
-    const currentProject = activeProject;
-    const validation = validateProject(currentProject);
+    const validation = validateProject(activeProject);
     if (!validation.valid) {
       showToast(validation.errors[0], 'error');
       return;
     }
 
+    const now = new Date().toISOString();
+    let currentProject = activeProject;
+
+    if (
+      !currentProject.id?.trim() ||
+      currentProject.id === 'clean-initial-draft' ||
+      currentProject.id === 'space-impacta-initial'
+    ) {
+      currentProject = {
+        ...currentProject,
+        id: createClientProjectId(),
+        createdAt: currentProject.createdAt || now,
+        updatedAt: now,
+      };
+      setActiveProject(currentProject);
+    }
+
     // 2. Generate Markdown and snapshot synchronously from the current click.
-    const markdown = generateReadmeMarkdown(
+    const snapshot = createPreviewSnapshot(
       currentProject,
       preferences.showTechnologyBadges,
       i18n.language as AppLocale
     );
 
-    // 3. Create preview snapshot.
-    const snapshot: ReadmePreviewSnapshot = {
-      schemaVersion: 1,
-      generatedAt: new Date().toISOString(),
-      projectId: currentProject.id,
-      projectName: currentProject.name,
-      locale: i18n.language as AppLocale,
-      project: typeof structuredClone !== 'undefined' ? structuredClone(currentProject) : JSON.parse(JSON.stringify(currentProject)),
-      markdown,
-    };
-
-    latestPreviewSnapshotRef.current = snapshot;
+    previewSnapshotsRef.current.set(snapshot.projectId, snapshot);
 
     // 4. Save snapshot to localStorage.
     const saved = savePreviewSnapshot(snapshot);
 
     // 5. Verify write.
-    const verification = readPreviewSnapshot();
+    const verification = readPreviewSnapshotForProject(snapshot.projectId);
     if (!saved || !verification) {
       showToast(
         i18n.language === 'en-US'
@@ -467,8 +525,9 @@ export default function App() {
     }
 
     // 6. Open the preview synchronously during the user gesture.
-    const previewUrl = new URL('/?view=preview', window.location.origin).toString();
-    const previewWindow = window.open(previewUrl, 'readme-preview');
+    const previewUrl = new URL('/?view=preview', window.location.origin);
+    previewUrl.searchParams.set('projectId', snapshot.projectId);
+    const previewWindow = window.open(previewUrl.toString(), getPreviewWindowName(snapshot.projectId));
     if (!previewWindow) {
       showToast(
         i18n.language === 'en-US'
@@ -481,7 +540,7 @@ export default function App() {
       return;
     }
 
-    previewWindowRef.current = previewWindow;
+    previewWindowsRef.current.set(snapshot.projectId, previewWindow);
 
     // 7. Save project to history/drafts without delaying the window.open call.
     saveProject(currentProject);
@@ -489,10 +548,27 @@ export default function App() {
     // 8. Broadcast updated project to open tabs/windows.
     try {
       const channel = new BroadcastChannel(PREVIEW_CHANNEL_NAME);
-      channel.postMessage({ type: 'PREVIEW_SNAPSHOT', payload: snapshot });
+      channel.postMessage({
+        type: 'PREVIEW_SNAPSHOT',
+        projectId: snapshot.projectId,
+        payload: snapshot,
+      });
       channel.close();
     } catch (e) {
       console.warn('BroadcastChannel error:', e);
+    }
+
+    try {
+      previewWindow.postMessage(
+        {
+          type: 'PREVIEW_SNAPSHOT',
+          projectId: snapshot.projectId,
+          payload: snapshot,
+        },
+        window.location.origin
+      );
+    } catch (e) {
+      console.warn('[README Preview] Could not send initial snapshot:', e);
     }
 
     try {
