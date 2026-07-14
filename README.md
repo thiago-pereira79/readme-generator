@@ -233,7 +233,7 @@ O usuário pode escolher entre mesclar os dados importados com os projetos exist
 
 A aplicação oferece suporte a:
 
-- Português — Brasil
+- Português - Brasil
 - English
 - Español
 
