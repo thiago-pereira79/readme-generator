@@ -2,9 +2,9 @@
 
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Status](https://img.shields.io/badge/Status-Online-brightgreen)
-![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=FFD62E)
 ![Idiomas](https://img.shields.io/badge/Idiomas-PT--BR%20%7C%20EN%20%7C%20ES-8C5CE6)
 ![Armazenamento](https://img.shields.io/badge/Armazenamento-Local--first-00A86B)
 ![Layout](https://img.shields.io/badge/Layout-Responsivo-00B8D9)
@@ -327,9 +327,9 @@ Entre os cuidados de desempenho estão:
 
 | Tecnologia | Finalidade |
 |---|---|
-| React 19 | Construção da interface e dos componentes |
+| React | Construção da interface e dos componentes |
 | TypeScript | Tipagem e organização do código |
-| Vite 6 | Ambiente de desenvolvimento e build |
+| Vite | Ambiente de desenvolvimento e build |
 | Tailwind CSS | Estilização e responsividade |
 | CSS | Estilos globais, temas e ajustes visuais |
 | Lucide React | Ícones da interface |
