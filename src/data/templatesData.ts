@@ -11,15 +11,15 @@ export const initialProject: ReadmeProject = {
     'Power-ups e habilidades',
     'Sistema de pontuação'
   ],
-  installation: 'git clone https://github.com/seu-usuario/space-impacta.git\ncd space-impacta\nnpm install',
+  installation: 'git clone https://github.com/thiago-pereira79/space-impacta.git\ncd space-impacta\nnpm install',
   usage: 'npm run dev',
   license: 'MIT',
-  repositoryUrl: 'https://github.com/thiago-pereira/space-impacta',
+  repositoryUrl: 'https://github.com/thiago-pereira79/space-impacta',
   deployUrl: 'https://space-impacta-demo.vercel.app',
   websiteUrl: 'https://space-impacta.com',
   authorName: 'Thiago Pereira',
   authorEmail: 'contato@thiagopereira.dev',
-  authorUrl: 'https://github.com/thiago-pereira',
+  authorUrl: 'https://github.com/thiago-pereira79',
   linkedinUrl: 'https://linkedin.com/in/thiago-pereira',
   screenshots: [
     {
