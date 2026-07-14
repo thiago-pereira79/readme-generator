@@ -336,18 +336,36 @@ export const PreviewPage: React.FC<PreviewPageProps> = ({ showBadges }) => {
     }
   };
 
-  // Back to editor (focus or redirect safely)
+  // Back to editor (focus opener when available, otherwise navigate here).
   const handleBackToEditor = () => {
+    const origin = window.location.origin;
+    const editorUrl = new URL('/', origin).toString();
+
     if (window.opener && !window.opener.closed) {
       try {
+        window.opener.postMessage(
+          {
+            type: 'RETURN_TO_README_EDITOR',
+          },
+          origin
+        );
+
         window.opener.focus();
+        window.close();
+
+        window.setTimeout(() => {
+          if (!window.closed) {
+            window.location.assign(editorUrl);
+          }
+        }, 200);
+
+        return;
       } catch (e) {
-        console.warn('Unable to focus opener:', e);
-        window.location.href = '/';
+        console.warn('[README Preview] Não foi possível retornar à guia original:', e);
       }
-    } else {
-      window.location.href = '/';
     }
+
+    window.location.assign(editorUrl);
   };
 
   // Simple redirection to main editor
@@ -597,11 +615,12 @@ export const PreviewPage: React.FC<PreviewPageProps> = ({ showBadges }) => {
           {/* Left part: Actions and Title */}
           <div className="flex items-center justify-between md:justify-start gap-4">
             <button
+              type="button"
               onClick={handleBackToEditor}
               className="flex items-center space-x-1.5 text-text-secondary hover:text-text-primary border border-border px-3.5 py-2 rounded-xl text-xs font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer bg-surface hover:bg-background"
               aria-label={t('preview.btn_back_to_editor', 'Voltar ao editor')}
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span>{t('preview.btn_back_to_editor', 'Voltar ao editor')}</span>
             </button>
             

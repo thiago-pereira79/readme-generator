@@ -191,6 +191,35 @@ export default function App() {
     }
   }, [activeProject, preferences.showTechnologyBadges, i18n.language]);
 
+  // Return focus/navigation from the independent preview tab to the editor.
+  useEffect(() => {
+    const handleReturnToEditor = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) {
+        return;
+      }
+
+      if (event.data?.type !== 'RETURN_TO_README_EDITOR') {
+        return;
+      }
+
+      setCurrentTab('generator');
+      setMobileActiveSubTab('edit');
+      setIsMobileDrawerOpen(false);
+
+      window.focus();
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'auto',
+      });
+    };
+
+    window.addEventListener('message', handleReturnToEditor);
+    return () => {
+      window.removeEventListener('message', handleReturnToEditor);
+    };
+  }, []);
+
   // Handle direct postMessage messages (e.g. PREVIEW_READY) from the opened preview tab
   useEffect(() => {
     const handlePreviewMessage = (event: MessageEvent) => {
@@ -352,8 +381,8 @@ export default function App() {
     if (hasUnsavedChanges()) {
       setConfirmDialog({
         isOpen: true,
-        title: 'Descartar alteraÃ§Ãµes?',
-        message: 'VocÃª possui alteraÃ§Ãµes nÃ£o salvas no rascunho atual. Deseja realmente iniciar um novo projeto e descartar o rascunho?',
+        title: 'Descartar alterações?',
+        message: 'Você possui alterações não salvas no rascunho atual. Deseja realmente iniciar um novo projeto e descartar o rascunho?',
         type: 'warning',
         onConfirm: () => {
           setConfirmDialog(prev => ({ ...prev, isOpen: false }));
@@ -431,14 +460,14 @@ export default function App() {
           ? 'Failed to prepare preview. Data was not saved.'
           : i18n.language === 'es-419'
           ? 'No se pudo preparar la vista previa. Los datos no se guardaron.'
-          : 'NÃ£o foi possÃ­vel preparar o preview. Os dados nÃ£o foram salvos.',
+          : 'Não foi possível preparar o preview. Os dados não foram salvos.',
         'error'
       );
       return;
     }
 
     // 6. Open the preview synchronously during the user gesture.
-    const previewUrl = new URL('/preview', window.location.origin).toString();
+    const previewUrl = new URL('/?view=preview', window.location.origin).toString();
     const previewWindow = window.open(previewUrl, 'readme-preview');
     if (!previewWindow) {
       showToast(
@@ -512,13 +541,13 @@ export default function App() {
         title: i18n.language === 'en-US' 
           ? 'Discard changes?' 
           : i18n.language === 'es-419' 
-          ? 'Â¿Descartar cambios?' 
-          : 'Descartar alteraÃ§Ãµes?',
+          ? '¿Descartar cambios?' 
+          : 'Descartar alterações?',
         message: i18n.language === 'en-US' 
           ? 'You have unsaved changes in the current draft. Choosing this template will replace the active draft. Do you wish to continue?' 
           : i18n.language === 'es-419' 
-          ? 'Tienes cambios sin guardar en el borrador actual. Elegir esta plantilla reemplazarÃ¡ el borrador activo. Â¿Deseas continuar?' 
-          : 'VocÃª possui alteraÃ§Ãµes nÃ£o salvas no rascunho atual. Escolher este template substituirÃ¡ os dados do rascunho ativo. Deseja continuar?',
+          ? 'Tienes cambios sin guardar en el borrador actual. Elegir esta plantilla reemplazará el borrador activo. ¿Deseas continuar?' 
+          : 'Você possui alterações não salvas no rascunho atual. Escolher este template substituirá os dados do rascunho ativo. Deseja continuar?',
         type: 'warning',
         onConfirm: () => {
           setConfirmDialog(prev => ({ ...prev, isOpen: false }));
@@ -553,7 +582,7 @@ export default function App() {
       onConfirm: () => {
         setConfirmDialog(prev => ({ ...prev, isOpen: false }));
         deleteProject(id);
-        showToast('Projeto excluÃ­do com sucesso.', 'info');
+        showToast('Projeto excluído com sucesso.', 'info');
       },
     });
   };
@@ -562,7 +591,7 @@ export default function App() {
   const handleDuplicateProject = async (id: string) => {
     const dup = await duplicateProject(id);
     if (dup) {
-      showToast(`CÃ³pia de "${dup.name}" criada.`, 'success');
+      showToast(`Cópia de "${dup.name}" criada.`, 'success');
     }
   };
 
@@ -602,7 +631,7 @@ export default function App() {
         <button
           onClick={toggleMobileDrawer}
           className="p-1.5 text-text-secondary hover:text-text-primary rounded-lg hover:bg-background transition-colors focus:outline-none cursor-pointer"
-          aria-label="Menu de NavegaÃ§Ã£o"
+          aria-label="Menu de Navegação"
         >
           <Menu className="w-5 h-5" />
         </button>
@@ -651,7 +680,7 @@ export default function App() {
                     <div className="flex items-center space-x-2">
                       <Code2 className="w-5 h-5 text-primary" />
                       <span className="font-bold text-sm tracking-tight">
-                        {i18n.language === 'en-US' ? 'Menu README' : i18n.language === 'es-419' ? 'MenÃº README' : 'Menu README'}
+                        {i18n.language === 'en-US' ? 'Menu README' : i18n.language === 'es-419' ? 'Menú README' : 'Menu README'}
                       </span>
                     </div>
                     <button
@@ -707,7 +736,7 @@ export default function App() {
                 <div className="border-t border-border pt-4">
                   <div className="text-xs font-semibold text-text-primary">README</div>
                   <div className="text-[10px] text-text-muted font-mono leading-tight">
-                    {i18n.language === 'en-US' ? 'Version 1.0.0' : i18n.language === 'es-419' ? 'VersiÃ³n 1.0.0' : 'VersÃ£o 1.0.0'}
+                    {i18n.language === 'en-US' ? 'Version 1.0.0' : i18n.language === 'es-419' ? 'Versión 1.0.0' : 'Versão 1.0.0'}
                   </div>
                 </div>
               </motion.div>
@@ -722,7 +751,7 @@ export default function App() {
           {currentTab === 'generator' && (
             <div className="max-w-[900px] mx-auto w-full space-y-6">
               {/* Main Greeting Banner Card */}
-              <div className="bg-surface border border-border/80 dark:border-border/30 p-5 max-[480px]:py-3 max-[480px]:px-4 md:p-6 rounded-2xl shadow-small flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="bg-surface border border-border p-5 max-[480px]:py-3 max-[480px]:px-4 md:p-6 rounded-2xl shadow-small flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="space-y-1 max-[480px]:space-y-0.5">
                   <h2 className="text-2xl md:text-3xl max-[480px]:text-xl font-sans font-black text-text-primary tracking-tight">
                     {t('greeting.title_normal')}<span className="text-primary">{t('greeting.title_highlighted')}</span>

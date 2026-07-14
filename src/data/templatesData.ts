@@ -133,7 +133,7 @@ export const readmeTemplates: ReadmeTemplate[] = [
       technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Recharts', 'lucide-react', 'motion'],
       features: [
         'Painel Kanban arrastar e soltar',
-        'Gráficos de produtividade dinâmicos',
+        'Gráficos de produtividade interativos',
         'Notificações em tempo real',
         'Controle de prazos e metas'
       ],

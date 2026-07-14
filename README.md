@@ -221,7 +221,7 @@ O projeto considera:
 
 - Navegação por teclado
 - Foco visível
-- Elementos HTML semânticos
+- Elementos HTML semanticamente corretos
 - Labels associados aos campos
 - Botões com nomes acessíveis
 - Estados de expansão com atributos ARIA
@@ -255,7 +255,7 @@ Entre os cuidados de desempenho estão:
 
 - Build otimizado pelo Vite
 - Carregamento sob demanda da página de Preview
-- Importação dinâmica das bibliotecas usadas na geração de PDF
+- Importação sob demanda das bibliotecas usadas na geração de PDF
 - Salvamento automático com atraso controlado
 - Limpeza de listeners ao desmontar componentes
 - Validação de tamanho antes de armazenar imagens

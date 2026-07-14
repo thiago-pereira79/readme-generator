@@ -21,7 +21,17 @@ import {
   List,
   Download,
   Play,
-  Shield
+  Shield,
+  GripVertical,
+  ClipboardList,
+  SquareTerminal,
+  FolderTree,
+  Map,
+  GitPullRequest,
+  UserRound,
+  Heart,
+  FlaskConical,
+  Mail
 } from 'lucide-react';
 
 const isOptionalHttpUrl = (url?: string): boolean => !url?.trim() || isValidHttpUrl(url);
@@ -268,8 +278,8 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
           screenshotUrl: i18n.language === 'en-US'
             ? 'Invalid image URL. Use http:// or https://.'
             : i18n.language === 'es-419'
-            ? 'URL de imagen invÃ¡lida. Usa http:// o https://.'
-            : 'URL de imagem invÃ¡lida. Use http:// ou https://.',
+            ? 'URL de imagen inválida. Usa http:// o https://.'
+            : 'URL de imagem inválida. Use http:// ou https://.',
         }));
         return;
       }
@@ -324,11 +334,11 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
     // Validate per-project quota
     if (totalProjectImagesSizeAfterUpload > PROJECT_SAFE_QUOTA) {
       alert(
-        `âš ï¸ Cota de armazenamento de imagem do projeto excedida!\n\n` +
+        `Atenção: cota de armazenamento de imagem do projeto excedida!\n\n` +
         `O tamanho total das imagens locais neste projeto seria de ${(totalProjectImagesSizeAfterUpload / (1024 * 1024)).toFixed(2)} MB, ` +
         `o que ultrapassa o limite seguro recomendado de ${(PROJECT_SAFE_QUOTA / (1024 * 1024)).toFixed(1)} MB por projeto.\n\n` +
-        `RecomendaÃ§Ãµes:\n` +
-        `- Reduza o tamanho ou resoluÃ§Ã£o da imagem antes de enviÃ¡-la.\n` +
+        `Recomendações:\n` +
+        `- Reduza o tamanho ou resolução da imagem antes de enviá-la.\n` +
         `- Utilize URLs de imagens hospedadas na web (ex: GitHub, Imgur).`
       );
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -368,7 +378,7 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
     // Validate total across all projects quota
     if (totalAllProjectsImagesSizeAfterUpload > ALL_PROJECTS_SAFE_QUOTA) {
       alert(
-        `âš ï¸ Limite de armazenamento global de imagens em risco!\n\n` +
+        `Atenção: limite de armazenamento global de imagens em risco!\n\n` +
         `O tamanho total das imagens locais em todos os seus projetos seria de ${(totalAllProjectsImagesSizeAfterUpload / (1024 * 1024)).toFixed(2)} MB, ` +
         `o que ultrapassa o limite seguro global de ${(ALL_PROJECTS_SAFE_QUOTA / (1024 * 1024)).toFixed(1)} MB.\n\n` +
         `Para proteger os dados e evitar falhas de cota no navegador, por favor:\n` +
@@ -436,18 +446,18 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
     const errors: Record<string, string> = {};
     
     if (!project.name.trim()) {
-      errors.name = i18n.language === 'en-US' ? 'Project name is required.' : i18n.language === 'es-419' ? 'El nombre del proyecto es obligatorio.' : 'O nome do projeto Ã© obrigatÃ³rio.';
+      errors.name = i18n.language === 'en-US' ? 'Project name is required.' : i18n.language === 'es-419' ? 'El nombre del proyecto es obligatorio.' : 'O nome do projeto é obrigatório.';
     }
     if (!project.description.trim()) {
-      errors.description = i18n.language === 'en-US' ? 'Project description is required.' : i18n.language === 'es-419' ? 'La descripciÃ³n del proyecto es obligatoria.' : 'A descriÃ§Ã£o do projeto Ã© obrigatÃ³ria.';
+      errors.description = i18n.language === 'en-US' ? 'Project description is required.' : i18n.language === 'es-419' ? 'La descripción del proyecto es obligatoria.' : 'A descrição do projeto é obrigatória.';
     }
 
     // Validate URLs if they are entered
     const invalidUrlMsg = i18n.language === 'en-US' 
       ? 'Invalid URL. Make sure to include the protocol (e.g. https://...)' 
       : i18n.language === 'es-419' 
-        ? 'URL invÃ¡lida. AsegÃºrate de incluir el protocolo (ej. https://...)' 
-        : 'URL invÃ¡lida. Certifique-se de incluir o protocolo (ex: https://...)';
+        ? 'URL inválida. Asegúrate de incluir el protocolo (ej. https://...)' 
+        : 'URL inválida. Certifique-se de incluir o protocolo (ex: https://...)';
 
     if (project.repositoryUrl && !isValidHttpUrl(project.repositoryUrl)) {
       errors.repositoryUrl = invalidUrlMsg;
@@ -467,9 +477,9 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
 
     if (project.optionalSections?.authors && !project.authorName?.trim()) {
       errors.authorName = i18n.language === 'en-US' 
-        ? "Enter the authorâ€™s name to add the signature."
+        ? "Enter the author’s name to add the signature."
         : i18n.language === 'es-419'
-          ? "Introduce el nombre del autor para aÃ±adir la firma."
+          ? "Introduce el nombre del autor para añadir la firma."
           : "Informe o nome do autor para adicionar a assinatura.";
     }
 
@@ -563,11 +573,11 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
                 </span>
                 <span className="text-[10px] bg-background dark:bg-surface border border-border text-text-secondary px-2 py-0.5 rounded-full font-medium max-w-full whitespace-nowrap">
                   {project.technologies?.length === 0 
-                    ? (i18n.language === 'en-US' ? 'Technologies: None' : i18n.language === 'es-419' ? 'TecnologÃ­as: Ninguna' : 'Tecnologias: Nenhuma') 
+                    ? (i18n.language === 'en-US' ? 'Technologies: None' : i18n.language === 'es-419' ? 'Tecnologías: Ninguna' : 'Tecnologias: Nenhuma') 
                     : i18n.language === 'en-US' 
                       ? `Technologies: ${project.technologies.length} ${project.technologies.length === 1 ? 'item' : 'items'}` 
                       : i18n.language === 'es-419' 
-                        ? `TecnologÃ­as: ${project.technologies.length} ${project.technologies.length === 1 ? 'artÃ­culo' : 'artÃ­culos'}` 
+                        ? `Tecnologías: ${project.technologies.length} ${project.technologies.length === 1 ? 'artículo' : 'artículos'}` 
                         : `Tecnologias: ${project.technologies.length} ${project.technologies.length === 1 ? 'item' : 'itens'}`}
                 </span>
               </div>
@@ -589,10 +599,10 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
                   <Sparkles className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                   <div className="space-y-1">
                     <span className="text-xs font-bold text-text-primary block">
-                      {i18n.language === 'en-US' ? 'Want to see how it works?' : i18n.language === 'es-419' ? 'Â¿Quieres ver cÃ³mo funciona?' : 'Quer ver como funciona?'}
+                      {i18n.language === 'en-US' ? 'Want to see how it works?' : i18n.language === 'es-419' ? '¿Quieres ver cómo funciona?' : 'Quer ver como funciona?'}
                     </span>
                     <span className="text-[10px] text-text-secondary leading-relaxed block">
-                      {i18n.language === 'en-US' ? 'Fill in the fields instantly with the Space Impacta demo project.' : i18n.language === 'es-419' ? 'Completa los campos instantÃ¡neamente con el proyecto demo Space Impacta.' : 'Preencha os campos instantaneamente com o projeto de demonstraÃ§Ã£o Space Impacta.'}
+                      {i18n.language === 'en-US' ? 'Fill in the fields instantly with the Space Impacta demo project.' : i18n.language === 'es-419' ? 'Completa los campos instantáneamente con el proyecto demo Space Impacta.' : 'Preencha os campos instantaneamente com o projeto de demonstração Space Impacta.'}
                     </span>
                   </div>
                 </div>
@@ -630,7 +640,7 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
                 )}
               </div>
 
-              {/* DescriÃ§Ã£o curta */}
+              {/* Descrição curta */}
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-text-secondary">
@@ -664,7 +674,7 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
               {/* Tecnologias utilizadas */}
               <div className="space-y-2">
                 <label className="text-xs font-bold text-text-secondary">
-                  {i18n.language === 'en-US' ? 'Technologies used' : i18n.language === 'es-419' ? 'TecnologÃ­as utilizadas' : 'Tecnologias utilizadas'}
+                  {i18n.language === 'en-US' ? 'Technologies used' : i18n.language === 'es-419' ? 'Tecnologías utilizadas' : 'Tecnologias utilizadas'}
                 </label>
                 <div className="flex space-x-2">
                   <input
@@ -707,7 +717,7 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
                   </div>
                 ) : (
                   <p className="text-[10px] text-text-muted italic">
-                    {i18n.language === 'en-US' ? 'No technologies added yet.' : i18n.language === 'es-419' ? 'Ninguna tecnologÃ­a agregada todavÃ­a.' : 'Nenhuma tecnologia adicionada ainda.'}
+                    {i18n.language === 'en-US' ? 'No technologies added yet.' : i18n.language === 'es-419' ? 'Ninguna tecnología agregada todavía.' : 'Nenhuma tecnologia adicionada ainda.'}
                   </p>
                 )}
               </div>
@@ -777,9 +787,9 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
                       className="flex items-center justify-between p-3 bg-surface-secondary border border-border rounded-xl shadow-xs group"
                     >
                       <div className="flex items-center space-x-3 flex-1 min-w-0">
-                        {/* Drag AlÃ§a visual grab handle */}
+                        {/* Visual grab handle */}
                         <div className="text-text-muted flex items-center space-x-0.5">
-                          <span className="text-sm font-bold tracking-tight">â‹®â‹®</span>
+                          <GripVertical className="w-4 h-4" aria-hidden="true" />
                         </div>
                         <span className="text-xs font-medium text-text-primary truncate">{feature}</span>
                       </div>
@@ -974,12 +984,12 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
                     <option value="Apache 2.0">Apache 2.0</option>
                     <option value="GPL 3.0">GPL 3.0</option>
                     <option value="BSD 3-Clause">BSD 3-Clause</option>
-                    <option value="ProprietÃ¡ria">{i18n.language === 'en-US' ? 'Proprietary' : i18n.language === 'es-419' ? 'Propietaria' : 'ProprietÃ¡ria'}</option>
-                    <option value="Sem licenÃ§a">{i18n.language === 'en-US' ? 'No license' : i18n.language === 'es-419' ? 'Sin licencia' : 'Sem licenÃ§a'}</option>
+                    <option value="Proprietária">{i18n.language === 'en-US' ? 'Proprietary' : i18n.language === 'es-419' ? 'Propietaria' : 'Proprietária'}</option>
+                    <option value="Sem licença">{i18n.language === 'en-US' ? 'No license' : i18n.language === 'es-419' ? 'Sin licencia' : 'Sem licença'}</option>
                     <option value="Personalizada">{i18n.language === 'en-US' ? 'Custom' : i18n.language === 'es-419' ? 'Personalizada' : 'Personalizada'}</option>
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-text-muted">
-                    â–¼
+                    <ChevronDown className="w-4 h-4" aria-hidden="true" />
                   </div>
                 </div>
               </div>
@@ -1268,12 +1278,12 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
                     {i18n.language === 'en-US' ? 'Click to select image' : i18n.language === 'es-419' ? 'Haz clic para seleccionar una imagen' : 'Clique para selecionar imagem'}
                   </p>
                   <p className="text-[10px] text-text-secondary mt-1">
-                    {i18n.language === 'en-US' ? 'JPEG, PNG or GIF (Max 1MB)' : i18n.language === 'es-419' ? 'JPEG, PNG o GIF (MÃ¡x. 1MB)' : 'JPEG, PNG ou GIF (MÃ¡x. 1MB)'}
+                    {i18n.language === 'en-US' ? 'JPEG, PNG or GIF (Max 1MB)' : i18n.language === 'es-419' ? 'JPEG, PNG o GIF (Máx. 1MB)' : 'JPEG, PNG ou GIF (Máx. 1MB)'}
                   </p>
                   <div className="mt-3 text-[10px] text-text-secondary leading-relaxed bg-amber-500/10 border border-amber-500/20 rounded-lg p-2.5 text-left">
                     <p className="text-amber-500 font-bold mb-1 flex items-center gap-1">
                       <AlertCircle className="w-3 h-3 shrink-0" />
-                      {i18n.language === 'en-US' ? 'Notice regarding Local Images:' : i18n.language === 'es-419' ? 'AtenciÃ³n sobre las ImÃ¡genes Locales:' : 'AtenÃ§Ã£o sobre Imagens Locais:'}
+                      {i18n.language === 'en-US' ? 'Notice regarding Local Images:' : i18n.language === 'es-419' ? 'Atención sobre las Imágenes Locales:' : 'Atenção sobre Imagens Locais:'}
                     </p>
                     <ul className="list-disc pl-3.5 space-y-1">
                       {i18n.language === 'en-US' ? (
@@ -1284,15 +1294,15 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
                         </>
                       ) : i18n.language === 'es-419' ? (
                         <>
-                          <li>Esta imagen se convertirÃ¡ a Base64 y se guardarÃ¡ <strong>solo en la cachÃ© de este navegador</strong>.</li>
-                          <li><strong>No se subirÃ¡ a tu repositorio de GitHub</strong> automÃ¡ticamente.</li>
-                          <li>Para que la imagen funcione en tu README publicado oficial, deberÃ¡s alojarla en la web o agregarla directamente a tu repositorio.</li>
+                          <li>Esta imagen se convertirá a Base64 y se guardará <strong>solo en la caché de este navegador</strong>.</li>
+                          <li><strong>No se subirá a tu repositorio de GitHub</strong> automáticamente.</li>
+                          <li>Para que la imagen funcione en tu README publicado oficial, deberás alojarla en la web o agregarla directamente a tu repositorio.</li>
                         </>
                       ) : (
                         <>
-                          <li>Esta imagem serÃ¡ convertida para Base64 e salva <strong>apenas no cache deste navegador</strong>.</li>
-                          <li>Ela <strong>nÃ£o serÃ¡ enviada ao seu repositÃ³rio do GitHub</strong> automaticamente.</li>
-                          <li>Para que a imagem funcione no seu README publicado oficial, vocÃª precisarÃ¡ hospedÃ¡-la na web ou adicionÃ¡-la diretamente ao seu repositÃ³rio.</li>
+                          <li>Esta imagem será convertida para Base64 e salva <strong>apenas no cache deste navegador</strong>.</li>
+                          <li>Ela <strong>não será enviada ao seu repositório do GitHub</strong> automaticamente.</li>
+                          <li>Para que a imagem funcione no seu README publicado oficial, você precisará hospedá-la na web ou adicioná-la diretamente ao seu repositório.</li>
                         </>
                       )}
                     </ul>
@@ -1445,7 +1455,7 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
               className="p-4 pt-0 border-t border-border bg-surface space-y-4"
             >
               <p className="text-xs text-text-secondary leading-normal">
-                {i18n.language === 'en-US' ? 'Enable additional sections by clicking the toggles and fill in their corresponding information.' : i18n.language === 'es-419' ? 'Active las secciones adicionales deseadas haciendo clic en los interruptores y complete su informaciÃ³n correspondiente.' : 'Ative as seÃ§Ãµes adicionais desejadas clicando nos toggles e preencha suas informaÃ§Ãµes correspondentes.'}
+                {i18n.language === 'en-US' ? 'Enable the desired additional sections by clicking the controls and fill in the corresponding information.' : i18n.language === 'es-419' ? 'Active las secciones adicionales deseadas haciendo clic en los controles y complete la información correspondiente.' : 'Ative as seções adicionais desejadas clicando nos controles e preencha as informações correspondentes.'}
               </p>
 
               {/* Accordions inside accordions */}
@@ -1453,61 +1463,71 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
                 {[
                   {
                     key: 'prerequisites',
-                    label: i18n.language === 'en-US' ? 'ðŸ“‹ Prerequisites' : i18n.language === 'es-419' ? 'ðŸ“‹ Prerrequisitos' : 'ðŸ“‹ PrÃ©-requisitos',
+                    label: i18n.language === 'en-US' ? 'Prerequisites' : i18n.language === 'es-419' ? 'Prerrequisitos' : 'Pré-requisitos',
+                    icon: ClipboardList,
                     field: 'prerequisitesContent',
                     placeholder: i18n.language === 'en-US' ? '- Node.js v18+\n- MySQL installed' : i18n.language === 'es-419' ? '- Node.js v18+\n- MySQL instalado' : '- Node.js v18+\n- MySQL instalado'
                   },
                   {
                     key: 'scripts',
-                    label: i18n.language === 'en-US' ? 'âš™ï¸ Available Scripts' : i18n.language === 'es-419' ? 'âš™ï¸ Scripts disponibles' : 'âš™ï¸ Scripts disponÃ­veis',
+                    label: i18n.language === 'en-US' ? 'Available Scripts' : i18n.language === 'es-419' ? 'Scripts disponibles' : 'Scripts disponíveis',
+                    icon: SquareTerminal,
                     field: 'scriptsContent',
                     placeholder: i18n.language === 'en-US' ? '- `npm test`: Runs the tests' : i18n.language === 'es-419' ? '- `npm test`: Ejecuta las pruebas' : '- `npm test`: Executa os testes'
                   },
                   {
                     key: 'folderStructure',
-                    label: i18n.language === 'en-US' ? 'ðŸ“ Folder Structure' : i18n.language === 'es-419' ? 'ðŸ“ Estructura de carpetas' : 'ðŸ“ Estrutura de pastas',
+                    label: i18n.language === 'en-US' ? 'Folder Structure' : i18n.language === 'es-419' ? 'Estructura de carpetas' : 'Estrutura de pastas',
+                    icon: FolderTree,
                     field: 'folderStructureContent',
-                    placeholder: '```text\nsrc/\n  â”œâ”€â”€ components/\n```'
+                    placeholder: '```text\nsrc/\n  ├── components/\n```'
                   },
                   {
                     key: 'roadmap',
-                    label: i18n.language === 'en-US' ? 'ðŸ—ºï¸ Roadmap' : i18n.language === 'es-419' ? 'ðŸ—ºï¸ Roadmap' : 'ðŸ—ºï¸ Roadmap',
+                    label: 'Roadmap',
+                    icon: Map,
                     field: 'roadmapContent',
                     placeholder: i18n.language === 'en-US' ? '- [x] Integrate API\n- [ ] Deploy' : i18n.language === 'es-419' ? '- [x] Integrar API\n- [ ] Deploy' : '- [x] Integrar API\n- [ ] Deploy'
                   },
                   {
                     key: 'contributing',
-                    label: i18n.language === 'en-US' ? 'ðŸ¤ Contributing' : i18n.language === 'es-419' ? 'ðŸ¤ ContribuciÃ³n' : 'ðŸ¤ ContribuiÃ§Ã£o',
+                    label: i18n.language === 'en-US' ? 'Contributing' : i18n.language === 'es-419' ? 'Contribución' : 'Contribuição',
+                    icon: GitPullRequest,
                     field: 'contributingContent',
-                    placeholder: i18n.language === 'en-US' ? 'Instructions for Pull Requests' : i18n.language === 'es-419' ? 'Instrucciones para Pull Requests' : 'InstruÃ§Ãµes para Pull Requests'
+                    placeholder: i18n.language === 'en-US' ? 'Instructions for Pull Requests' : i18n.language === 'es-419' ? 'Instrucciones para Pull Requests' : 'Instruções para Pull Requests'
                   },
                   {
                     key: 'authors',
-                    label: i18n.language === 'en-US' ? 'ðŸ’» Developed by' : i18n.language === 'es-419' ? 'ðŸ’» Desarrollado por' : 'ðŸ’» Desenvolvido por',
+                    label: i18n.language === 'en-US' ? 'Developed by' : i18n.language === 'es-419' ? 'Desarrollado por' : 'Desenvolvido por',
+                    icon: UserRound,
                     field: 'authorsContent',
-                    placeholder: i18n.language === 'en-US' ? 'Enter the authorâ€™s name to add the signature.' : i18n.language === 'es-419' ? 'Introduce el nombre del autor para aÃ±adir la firma.' : 'Informe o nome do autor para adicionar a assinatura.'
+                    placeholder: i18n.language === 'en-US' ? 'Enter the author’s name to add the signature.' : i18n.language === 'es-419' ? 'Introduce el nombre del autor para añadir la firma.' : 'Informe o nome do autor para adicionar a assinatura.'
                   },
                   {
                     key: 'acknowledgements',
-                    label: i18n.language === 'en-US' ? 'ðŸ’ Acknowledgements' : i18n.language === 'es-419' ? 'ðŸ’ Agradecimientos' : 'ðŸ’ Agradecimentos',
+                    label: i18n.language === 'en-US' ? 'Acknowledgements' : i18n.language === 'es-419' ? 'Agradecimientos' : 'Agradecimentos',
+                    icon: Heart,
                     field: 'acknowledgementsContent',
                     placeholder: i18n.language === 'en-US' ? 'Special thanks to...' : i18n.language === 'es-419' ? 'Agradecimiento especial para...' : 'Agradecimento especial para...'
                   },
                   {
                     key: 'tests',
-                    label: i18n.language === 'en-US' ? 'ðŸ§ª Tests' : i18n.language === 'es-419' ? 'ðŸ§ª Pruebas' : 'ðŸ§ª Testes',
+                    label: i18n.language === 'en-US' ? 'Tests' : i18n.language === 'es-419' ? 'Pruebas' : 'Testes',
+                    icon: FlaskConical,
                     field: 'testsContent',
-                    placeholder: i18n.language === 'en-US' ? 'Run the test suite with:\n`npm run test`' : i18n.language === 'es-419' ? 'Ejecuta la suite de pruebas con:\n`npm run test`' : 'Rode a suÃ­te de testes com:\n`npm run test`'
+                    placeholder: i18n.language === 'en-US' ? 'Run the test suite with:\n`npm run test`' : i18n.language === 'es-419' ? 'Ejecuta la suite de pruebas con:\n`npm run test`' : 'Rode a suíte de testes com:\n`npm run test`'
                   },
                   {
                     key: 'contact',
-                    label: i18n.language === 'en-US' ? 'ðŸ“§ Contact / Additional Networks' : i18n.language === 'es-419' ? 'ðŸ“§ Contacto / Redes adicionales' : 'ðŸ“§ Contato / Redes adicionais',
+                    label: i18n.language === 'en-US' ? 'Contact / Additional Networks' : i18n.language === 'es-419' ? 'Contacto / Redes adicionales' : 'Contato / Redes adicionais',
+                    icon: Mail,
                     field: 'contactContent',
-                    placeholder: i18n.language === 'en-US' ? 'Questions? Send an email to...' : i18n.language === 'es-419' ? 'Â¿Preguntas? EnvÃ­a un correo electrÃ³nico a...' : 'DÃºvidas? Mande um e-mail para...'
+                    placeholder: i18n.language === 'en-US' ? 'Questions? Send an email to...' : i18n.language === 'es-419' ? '¿Preguntas? Envía un correo electrónico a...' : 'Dúvidas? Mande um e-mail para...'
                   }
                 ].map(item => {
                   const isActive = project.optionalSections[item.key as keyof ReadmeProject['optionalSections']];
                   const isExpanded = isActive && (expandedOptionalSections[item.key] === true);
+                  const Icon = item.icon;
                   return (
                     <div key={item.key} className="border border-border rounded-xl overflow-hidden shadow-xs">
                       {/* Sub-header checkbox wrapper */}
@@ -1532,6 +1552,7 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
                               }`}
                             />
                           </button>
+                          <Icon className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
                           <span className="text-xs font-bold text-text-primary">{item.label}</span>
                         </div>
                         {isActive && (
@@ -1574,9 +1595,9 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
                                       setValidationErrors(prev => ({
                                         ...prev,
                                         authorName: i18n.language === 'en-US'
-                                          ? "Enter the authorâ€™s name to add the signature."
+                                          ? "Enter the author’s name to add the signature."
                                           : i18n.language === 'es-419'
-                                            ? "Introduce el nombre del autor para aÃ±adir la firma."
+                                            ? "Introduce el nombre del autor para añadir la firma."
                                             : "Informe o nome do autor para adicionar a assinatura."
                                       }));
                                     }
@@ -1598,7 +1619,7 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
                                     {i18n.language === 'en-US'
                                       ? "Enter how your name should appear at the end of the README."
                                       : i18n.language === 'es-419'
-                                        ? "Informe cÃ³mo debe aparecer su nombre al final del README."
+                                        ? "Informe cómo debe aparecer su nombre al final del README."
                                         : "Informe como seu nome deve aparecer no final do README."}
                                   </p>
                                 )}
@@ -1632,8 +1653,8 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
                                   {i18n.language === 'en-US'
                                     ? "Add a link to GitHub, LinkedIn, portfolio or personal website."
                                     : i18n.language === 'es-419'
-                                      ? "AÃ±ada un enlace a GitHub, LinkedIn, portafolio o sitio web personal."
-                                      : "Adicione um link para GitHub, LinkedIn, portfÃ³lio ou site pessoal."}
+                                      ? "Añada un enlace a GitHub, LinkedIn, portafolio o sitio web personal."
+                                      : "Adicione um link para GitHub, LinkedIn, portfólio ou site pessoal."}
                                 </p>
                               </div>
 
@@ -1641,11 +1662,11 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
                               {project.authorName?.trim() && (
                                 <div className="space-y-1.5 pt-1">
                                   <p className="text-[10px] uppercase tracking-wider text-text-muted font-bold">
-                                    {i18n.language === 'en-US' ? 'Signature Preview' : i18n.language === 'es-419' ? 'Vista previa de la firma' : 'PrÃ©-visualizaÃ§Ã£o da assinatura'}
+                                    {i18n.language === 'en-US' ? 'Signature Preview' : i18n.language === 'es-419' ? 'Vista previa de la firma' : 'Pré-visualização da assinatura'}
                                   </p>
                                   <div className="p-2.5 bg-background border border-border rounded-xl font-mono text-xs text-text-secondary">
                                     ---<br/><br/>
-                                    ðŸ’» {i18n.language === 'en-US' ? 'Developed by' : i18n.language === 'es-419' ? 'Desarrollado por' : 'Desenvolvido por'}{' '}
+                                    💻 {i18n.language === 'en-US' ? 'Developed by' : i18n.language === 'es-419' ? 'Desarrollado por' : 'Desenvolvido por'}{' '}
                                     <strong>
                                       {getAuthorLink(project) ? (
                                         <a href={getAuthorLink(project)!} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
@@ -1713,4 +1734,3 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
     </div>
   );
 };
-
