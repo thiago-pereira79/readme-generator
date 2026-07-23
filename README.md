@@ -271,7 +271,7 @@ Entre as principais decisões de UX estão:
 
 ---
 
-## 🧭 Acessibilidade
+## Acessibilidade
 
 O projeto considera:
 
